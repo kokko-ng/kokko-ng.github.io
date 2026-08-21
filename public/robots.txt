@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kokko-ng.github.io/sitemap-index.xml

@@ -1,0 +1,38 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getPosts, formatDate, isoDate } from "../../lib/posts";
+import { site } from "../../data/site";
+
+const posts = await getPosts();
+const count = String(posts.length).padStart(2, "0");
+---
+
+<Base title="Blog" description="Written notes by Kokko Ng on data structures, computer architecture, and agentic developer tooling.">
+  <div class="stream">
+    <p class="label" style="margin-bottom: 14px">Blog &mdash; {count}</p>
+    <p class="lede" style="margin: 0 0 26px">{site.intros.blog}</p>
+
+    {
+      posts.length === 0 ? (
+        <p class="lede" style="margin: 0">No notes have been published yet.</p>
+      ) : (
+        <div class="posts">
+          {posts.map((post) => (
+            <article class="post-item">
+              <div class="post-item__head">
+                <h2 class="post-item__title">
+                  <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+                  {post.data.draft && <span class="draft-flag">Draft</span>}
+                </h2>
+                <time class="label" datetime={isoDate(post.data.pubDate)}>
+                  {formatDate(post.data.pubDate)}
+                </time>
+              </div>
+              <p class="post-item__blurb">{post.data.description}</p>
+            </article>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</Base>

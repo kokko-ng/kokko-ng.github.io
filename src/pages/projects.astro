@@ -1,0 +1,33 @@
+---
+import Base from "../layouts/Base.astro";
+import { projects } from "../data/projects";
+import { site } from "../data/site";
+
+const count = String(projects.length).padStart(2, "0");
+---
+
+<Base title="Projects" description="Projects undertaken by Kokko Ng in order to understand systems by implementing them, in Python, TypeScript and shell.">
+  <div class="stream">
+    <p class="label" style="margin-bottom: 14px">Projects &mdash; {count}</p>
+    <p class="lede" style="margin: 0 0 26px">{site.intros.projects}</p>
+
+    <div class="entries">
+      {
+        projects.map((project) => (
+          <article class="entry">
+            <div class="entry__head">
+              <h2 class="entry__name">
+                <a href={project.href} rel="noopener">{project.name}</a>
+              </h2>
+              <p class="label">
+                {[project.lang, project.year, ...project.tags].join(" · ")}
+              </p>
+            </div>
+            <p class="entry__desc">{project.description}</p>
+            <p class="entry__why">{project.why}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</Base>

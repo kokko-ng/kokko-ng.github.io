@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .bg { fill: #ffffff }
+    .fg { fill: #0a0a0a }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #0a0a0a }
+      .fg { fill: #ededed }
+    }
+  </style>
+  <rect class="bg" width="32" height="32"/>
+  <!-- the rail, and the tick that marks the current page -->
+  <rect class="fg" x="10" y="4" width="1.5" height="24"/>
+  <rect class="fg" x="15" y="15.25" width="9" height="1.5"/>
+</svg>

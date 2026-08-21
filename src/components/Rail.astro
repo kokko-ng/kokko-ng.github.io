@@ -1,0 +1,69 @@
+---
+import { site, nav } from "../data/site";
+
+interface Props {
+  /** Pathname of the current page, used to mark the active nav item. */
+  path: string;
+}
+const { path } = Astro.props;
+
+const isCurrent = (href: string) =>
+  href === "/" ? path === "/" : path.startsWith(href);
+---
+
+<header class="rail">
+  <a class="rail__name" href="/">{site.title}</a>
+  <p class="rail__tagline">{site.tagline}</p>
+
+  <nav class="rail__nav" aria-label="Main">
+    {
+      nav.map((item) => (
+        <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined}>
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
+
+  <div class="rail__foot">
+    <p class="rail__quote">&ldquo;{site.quote}&rdquo;</p>
+    <div class="rail__links">
+      {
+        site.links.map((link) => (
+          <a href={link.href} rel="me">
+            {link.text}
+          </a>
+        ))
+      }
+    </div>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-live="polite">
+      Theme
+    </button>
+  </div>
+</header>
+
+<script>
+  const KEY = "theme";
+  const root = document.documentElement;
+  const button = document.querySelector<HTMLButtonElement>("[data-theme-toggle]");
+
+  const systemDark = () => window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const active = () => root.dataset.theme ?? (systemDark() ? "dark" : "light");
+
+  const label = () => {
+    if (button) button.textContent = active() === "dark" ? "Light" : "Dark";
+  };
+
+  label();
+
+  button?.addEventListener("click", () => {
+    const next = active() === "dark" ? "light" : "dark";
+    root.dataset.theme = next;
+    try {
+      localStorage.setItem(KEY, next);
+    } catch {
+      /* private mode, or site data blocked — the choice just will not persist */
+    }
+    label();
+  });
+</script>

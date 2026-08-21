@@ -1,0 +1,63 @@
+---
+import Base from "./Base.astro";
+import { formatDate, isoDate, type Post } from "../lib/posts";
+
+interface Props {
+  post: Post;
+  prev?: Post;
+  next?: Post;
+}
+
+const { post, prev, next } = Astro.props;
+const { title, description, pubDate, updatedDate, tags, draft } = post.data;
+---
+
+<Base title={title} description={description} ogType="article">
+  <article class="article">
+    {tags.length > 0 && <p class="label">{tags.join(" · ")}</p>}
+
+    <h1 class="article__title">
+      {title}{draft && <span class="draft-flag">Draft</span>}
+    </h1>
+
+    <p class="article__stand">{description}</p>
+
+    <div class="article__bar">
+      <time class="label" datetime={isoDate(pubDate)}>{formatDate(pubDate)}</time>
+      {
+        updatedDate && (
+          <time class="label" datetime={isoDate(updatedDate)}>
+            Updated {formatDate(updatedDate)}
+          </time>
+        )
+      }
+    </div>
+
+    <div class="prose">
+      <slot />
+    </div>
+
+    {
+      (prev || next) && (
+        <nav class="pager" aria-label="More posts">
+          <div>
+            {prev && (
+              <a href={`/blog/${prev.id}/`}>
+                <span class="label">Previous</span>
+                <span class="pager__title">{prev.data.title}</span>
+              </a>
+            )}
+          </div>
+          <div class="pager__next">
+            {next && (
+              <a href={`/blog/${next.id}/`}>
+                <span class="label">Next</span>
+                <span class="pager__title">{next.data.title}</span>
+              </a>
+            )}
+          </div>
+        </nav>
+      )
+    }
+  </article>
+</Base>
