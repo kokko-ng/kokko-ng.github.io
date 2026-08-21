@@ -1,40 +1,37 @@
 ---
-title: "The Elements Available to a Note on This Site"
-description: "A draft which sets out every typographic element the site is able to render, in order that it may be used as the starting point for a subsequent note."
+title: "Every element a note on this site can render"
+description: "A draft that exercises the whole type system — headings, code, lists, quotes and tables — so it can be copied as the starting point for a real note."
 pubDate: 2026-08-21
 tags: ["meta"]
 draft: true
 ---
 
-This note carries the field `draft: true` in its frontmatter, and is therefore rendered
-during local development while being excluded from the production build, the index, the
-feed, and the sitemap. The following discussion sets out the elements available to a
-note on this site, summarises the conventions governing each of them, and indicates the
-manner in which this file should be adapted for subsequent use.
+This note carries `draft: true` in its frontmatter, so it renders during local
+development and is left out of the production build, the index, the feed and the
+sitemap. What follows sets out every element a note can use, the convention governing
+each one, and how to adapt this file for a real post.
 
-The paragraph rendered above the date is not drawn from the body of the document. It is
-taken from the `description` field, and it is reproduced on the index, in the feed, and
-in the page's meta description. It should accordingly be confined to one or two
-sentences.
+The paragraph above the date is not part of the body. It comes from the `description`
+field, and the same text appears on the index, in the feed, and as the page's meta
+description — so keep it to one or two sentences.
 
-## The Treatment of Headings and Body Copy
+## Headings and body copy
 
-A second-level heading opens a section. Body copy is set to a measure of thirty-three
-ems, which is approximately seventy characters, a width at which sustained reading does
-not require movement of the head. Inline elements behave as expected: **bold**,
-*italic*, `inline code`, and [a link](https://github.com/kokko-ng), which is underlined
-on hover.
+A second-level heading opens a section. Body copy is set to a 33em measure, about
+seventy characters, which is a width you can read for a long stretch without moving
+your head. Inline elements behave as expected: **bold**, *italic*, `inline code`, and
+[a link](https://github.com/kokko-ng), which underlines on hover.
 
-### The Function of Third-Level Headings
+### What third-level headings are for
 
-A third-level heading is set in the monospaced face at label size, and therefore reads
-as a marker rather than as a competing headline. It should be used to divide a long
-section, and not to introduce a new subject.
+A third-level heading is set in the monospace face at label size, so it reads as a
+marker rather than a competing headline. Use it to divide a long section, not to
+introduce a new subject.
 
-## The Rendering of Code
+## Code
 
-Fenced blocks are highlighted at build time, with the consequence that no JavaScript is
-shipped in order to display them:
+Fenced blocks are highlighted at build time, so nothing ships to the browser to display
+them:
 
 ```python
 class DynamicArray:
@@ -51,26 +48,26 @@ class DynamicArray:
         self._slots, self._cap = bigger, cap
 ```
 
-Lines exceeding the width of the block scroll within it, rather than displacing the page.
+Lines wider than the block scroll inside it rather than pushing the page sideways.
 
-## The Two Forms of List
+## The two kinds of list
 
 An unordered list is marked with a short rule:
 
-- Doubling the capacity costs approximately 2n copies across n appends.
+- Doubling the capacity costs roughly 2n copies across n appends.
 - Growing by a fixed hundred slots costs n squared over two hundred.
-- The worst single append remains O(n) under either strategy.
+- The worst single append is O(n) under either strategy.
 
-An ordered list is marked with zero-padded numerals set in the accent position:
+An ordered list is marked with zero-padded numerals in the accent position:
 
-1. Count operations rather than seconds.
-2. Plot the resulting count against n.
-3. Only thereafter should a profiler be consulted.
+1. Count operations, not seconds.
+2. Plot the count against n.
+3. Only then reach for a profiler.
 
-## Quotations and Tabulated Results
+## Quotes and tables
 
-> Amortised analysis is an accounting device rather than a physical result. The
-> expensive operation still occurs; one has merely agreed to pay for it in instalments.
+> Amortised analysis is an accounting device, not a physical result. The expensive
+> operation still happens; you have only agreed to pay for it in instalments.
 
 | Growth strategy | Total copies for n appends | Worst single append |
 | --- | --- | --- |
@@ -78,13 +75,11 @@ An ordered list is marked with zero-padded numerals set in the accent position:
 | Grow by 1.5x | ~3n | O(n) |
 | Add 100 slots | n^2 / 200 | O(n) |
 
-A table wider than the measure scrolls within its own container, with the result that
-the page itself never scrolls horizontally.
+A table wider than the measure scrolls inside its own container, so the page itself
+never scrolls horizontally.
 
 ---
 
-In sum, the elements set out above constitute the full typographic range of a note on
-this site. In order to publish a note, this file should be copied to
-`src/content/blog/your-slug.md`, its frontmatter replaced, and the field `draft: true`
-removed once the note is ready. The filename determines the URL at which the note is
-served.
+That is the full range. To write a real note, copy this file to
+`src/content/blog/your-slug.md`, replace the frontmatter, and drop `draft: true` when
+it is ready. The filename becomes the URL.
