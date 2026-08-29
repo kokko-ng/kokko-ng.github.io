@@ -34,8 +34,7 @@ component classes, each named and individually located: duplicate token heads th
 the name occurring twice, S-inhibition heads that "write in the query of the Name Mover
 Heads" so as to remove that duplicate from their attention, and name mover heads that copy
 whichever name remains. The decomposition was established by path patching into
-the query specifically, rather than by observing correlations in attention maps, which is
-what makes it a causal account (Wang et al., 2023).
+the query specifically, rather than by observing correlations in attention maps, which is what makes it a causal account (Wang et al., 2023). The circuit as Wang et al. (2023) report it is presented in Figure 1.
 
 <figure>
 <svg class="dg" viewBox="0 0 620 320" role="img" aria-labelledby="ttl-ioi">
@@ -117,9 +116,8 @@ that template even where the words ask for the opposite, and this has been demon
 causally rather than inferred. Hanna, Liu and Variengien (2023) identify the circuit by
 which GPT-2 small completes year spans, in which attention heads communicate the start
 year into the residual stream and, in the authors' words, "MLPs 9, 10, and 11 appear to
-compute the greater-than operation in tandem, and in steps". Having established the
-circuit on the case it was built for, the authors then examine prompts that invert the
-relation while preserving its surface shape.
+compute the greater-than operation in tandem, and in steps". Having established the circuit on the case it was built for, the authors then examine
+prompts that invert the relation while preserving its surface shape. Figure 2 shows the overgeneralisation this exposes (Wang et al., 2023).
 
 <figure>
 <svg class="dg" viewBox="0 0 620 300" role="img" aria-labelledby="ttl-gt">
@@ -183,8 +181,9 @@ Model components are redundant to a degree that undermines explanations creditin
 of them, which is the most epistemically consequential finding in this series. Wang et al.
 (2023) report that when they knocked out all of the name mover heads at once — the
 components that literally write the answer — "the circuit still worked (only 5% drop in
-logit difference)", because other heads compensated by replacing their role, and the
-authors conclude that this "complicates the search for complete mechanisms".
+logit difference)", because other heads compensated by replacing their role, and the authors conclude that
+this "complicates the search for complete mechanisms". The accounting behind that
+near-zero net effect, as McGrath et al. (2023) set it out, is presented in Figure 3.
 
 <figure>
 <svg class="dg" viewBox="0 0 620 250" role="img" aria-labelledby="ttl-sr">
@@ -262,8 +261,9 @@ Miller, Chughtai and Saunders, 2024).
 ## The practice these results support
 
 The recommendations below follow from the behavioural results rather than from the circuit
-diagrams, because the behavioural results are the more robust half of each finding (Miller,
-Chughtai and Saunders, 2024).
+diagrams, because the behavioural results are the more robust half of each finding (Miller, Chughtai
+and Saunders, 2024). Figure 4 sets the four properties of a prompt this review can speak to against the one it
+cannot (Miller, Chughtai & Saunders, 2024).
 
 <figure>
 <svg class="dg" viewBox="0 0 620 274" role="img" aria-labelledby="ttl-lad">
@@ -303,8 +303,8 @@ them are removable.
 | The task restated three ways | Accumulated turns of clarification | Restate once, in final form |
 | A test and its copied-out failure | Pasting both the test and the runner output | Keep the failure output, cite the test path |
 
-The practice that follows is to pass the assembled context through a duplication check
-before sending it, in the same spirit as the existence check in the second note.
+The practice that follows from Wang et al. (2023) is to pass the assembled context through
+a duplication check before sending it, in the same spirit as the existence check in the second note.
 
 ```bash
 # Identifiers appearing in more than one distinct block of the assembled context.
@@ -346,8 +346,9 @@ Skip the tests that are already        Run the full suite once. Collect the name
 passing                                failed. Re-run only those names.
 ```
 
-Each stronger form has two properties: the operation is expressed positively, over an
-explicitly constructed set, and the check is mechanical rather than a matter of the agent
+Each stronger form has two properties, both of them responses to the surface-form result
+of Wang et al. (2023): the operation is expressed positively, over an explicitly
+constructed set, and the check is mechanical rather than a matter of the agent
 remembering a prohibition. Consequently, the instruction no longer depends on the model
 resisting the pull of the more common template.
 
@@ -357,8 +358,9 @@ The self-repair result is the reason prompt-ingredient attribution requires cont
 repeats rather than single observations. Because redundant internal pathways mean a prompt
 can succeed for reasons unrelated to the cue a practitioner credits, and that removing an
 apparently load-bearing instruction may cost far less than expected (Wang et al., 2023;
-McGrath et al., 2023), the widespread practice of adding a line, observing an improvement
-and retaining the line indefinitely is unsound by construction.
+McGrath et al., 2023), the widespread practice of adding a line, observing an improvement and retaining the line
+indefinitely is unsound by construction. The loop that the self-repair result argues for
+instead is presented in Figure 5.
 
 <figure>
 <svg class="dg" viewBox="0 0 620 236" role="img" aria-labelledby="ttl-loop">
@@ -396,7 +398,7 @@ the baseline, not between one run before and one run after. The figure encodes t
 recommended procedure and is not drawn from any cited experiment.</figcaption>
 </figure>
 
-In practice this means three things. Firstly, a held-out set of representative tasks is the
+In practice the self-repair result of McGrath et al. (2023) means three things. Firstly, a held-out set of representative tasks is the
 artefact worth building, and it is worth more than any individual prompt line. Secondly,
 `k` should be large enough that the run-to-run spread is visible, since a change smaller
 than that spread is indistinguishable from noise. Thirdly, and least often done, the line
@@ -433,7 +435,8 @@ it, so that a later reader can tell a measured effect from an inherited supersti
 ```
 
 An instruction file maintained this way tends to shrink rather than grow, which is the
-opposite of the usual trajectory and is the clearest practical consequence of taking the
+opposite of the usual trajectory and, given the redundancy McGrath et al. (2023) report,
+is the clearest practical consequence of taking the
 self-repair result seriously.
 
 ## What this review could not establish
@@ -494,10 +497,10 @@ survive scrutiny concern what is in a context, where it sits, and what surface f
 takes; they do not concern how a model is addressed, and the confident advice in
 circulation about the latter draws no support from the work reviewed here.
 
-As a next step, the useful move for a practitioner is not to adopt the recommendations in
-these notes but to build the evaluation set that would test them, because a held-out set of
-representative tasks converts every claim above from an extrapolation into a measurement on
-the workload that actually matters.
+The useful move for a practitioner is therefore not to adopt the recommendations in these
+notes but to assemble a held-out set of representative tasks, run each prompt variant
+across repeated samples, and compare the difference against the run-to-run spread, because
+that procedure converts every claim above from an extrapolation into a measurement.
 
 ## References
 

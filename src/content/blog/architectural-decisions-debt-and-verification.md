@@ -8,10 +8,13 @@ series:
   part: 3
 ---
 
-The following discussion maintains that the information an agent most needs about a codebase
-is the rationale behind its structure, that this is precisely the information the empirical
-literature finds least often written down, and that the verification step most practitioners
-rely on has been measured and found much weaker than it appears. It will be shown that
+LaToza, Venolia and DeLine (2006) found that understanding why existing code is the way it
+is was the difficulty engineers rated most highly, and that the documents meant to record
+it were described as write-only. That finding sets the shape of this discussion, which
+maintains that the information an agent most needs about a codebase is the rationale
+behind its structure, that this is precisely the information least often written down, and
+that the verification step most practitioners rely on has been measured and found much
+weaker than it appears. It will be shown that
 understanding the reasoning behind existing code is the highest-rated difficulty developers
 report, and that design documents are largely not consulted when they need it. Next, it will
 be argued that the cost of poor structure concentrates in architectural decisions and in
@@ -37,8 +40,7 @@ affect their code a serious problem and 55 per cent rating understanding the imp
 own changes elsewhere a serious problem (LaToza, Venolia & DeLine, 2006). When developers
 investigate code they go to the artefacts rather than to prose, spending on average 42 per
 cent of understanding time reading source, 20 per cent in the debugger and 16 per cent
-reading check-in comments (LaToza, Venolia & DeLine, 2006). Figure 1 sets out that
-distribution. In sum, the need is for rationale and for change impact, because those are the
+reading check-in comments (LaToza, Venolia & DeLine, 2006). Figure 1 presents that distribution. In sum, the need is for rationale and for change impact, because those are the
 two things the people who already know the system still report not having.
 
 <figure>
@@ -96,8 +98,7 @@ showing that defect-prone files are not scattered independently but cluster into
 architecturally connected groups whose connecting structures carry the flaw. Those clusters
 are locatable from routinely available data, because Xiao, Cai and Kazman (2014) construct
 them by combining structural dependencies with evolutionary co-change as first-class
-relations, using revision history and issue-tracker records. Figure 2 sets out the
-difference between the two pictures. Accordingly, the useful unit of architectural attention
+relations, using revision history and issue-tracker records. The difference between the two pictures is shown in Figure 2. Accordingly, the useful unit of architectural attention
 is a group of files linked by a shared flawed decision, because that is the unit in which the
 measured defects actually arrive.
 
@@ -152,7 +153,7 @@ the curve of 50.95 per cent, which is indistinguishable from chance (Lenarduzzi 
 found that for more than seventy per cent of debt items the measured change- and
 fault-proneness did not increase with the assigned severity level, and that where differences
 between clean and affected classes were statistically significant the effect sizes were
-negligible. Figure 3 sets the assigned ranking against the measured one. The authors
+negligible. Figure 3 presents the assigned ranking against the measured one. The authors
 recommend against the default rule set that more than ninety-eight per cent of public
 projects use, in favour of per-project historical analysis (Lenarduzzi, Saarimäki & Taibi,
 2020). Therefore a tool's own severity label should not be passed to an agent as a priority,
@@ -194,8 +195,7 @@ of the patches scored as successful had their solution stated directly in the is
 its comments. A further 31.08 per cent of passing patches were judged suspicious because the
 tests were too weak to establish that the patch was correct (Aleithan et al., 2024). After
 both categories were filtered out, the reported resolution rate for one widely cited agent
-fell from 12.47 per cent to 3.97 per cent (Aleithan et al., 2024). Figure 4 sets out the
-filtering. Aleithan et al. (2024) further report that over 94 per cent of the benchmark's
+fell from 12.47 per cent to 3.97 per cent (Aleithan et al., 2024). Figure 4 shows the filtering. Aleithan et al. (2024) further report that over 94 per cent of the benchmark's
 issues predate the evaluated models' knowledge cutoffs, and that the same defects are present
 in the curated derivative sets. In sum, a passing test suite in this setting is weak evidence
 of a correct patch, because in almost a third of passing cases the tests could not have
@@ -307,9 +307,9 @@ practitioner claims rather than of measured results. Each of these remains open.
 
 ## Conclusion
 
-It was first established that rationale and change impact are the difficulties developers
-rate most highly, and that the documents intended to supply them are described as seldom read
-and rarely current. Next, the concentration of cost was presented, with architectural
+It was shown that rationale and change impact are the difficulties developers rate most
+highly, and that the documents intended to supply them are described as seldom read and
+rarely current. Next, the concentration of cost was presented, with architectural
 decisions identified as the leading source of technical debt in a survey of 1,831
 practitioners and defect-prone files shown to cluster into connected groups rather than
 scatter. It was then shown that tool-assigned severities do not track measured harm, since a
@@ -319,10 +319,10 @@ format and verification protocol were constructed and marked as extrapolation. A
 thread running through these findings is that the artefacts practitioners treat as evidence —
 a severity label, a green test suite, a benchmark score — have each been measured and found
 not to carry the meaning assigned to them, while the information that is genuinely scarce is
-the reason a boundary exists. As a next step, a practitioner should write the constraint form
-of the three or four decisions their codebase actually depends on, because that is the
-cheapest available test of whether the recommendation is worth more than the evidence
-currently supports.
+the reason a boundary exists. The cheapest available test is to write the constraint form of the three or four decisions
+a codebase actually depends on, put them where the agent reads them, and record over the
+following month which of them the agent breached and which it never needed, because that
+is the one measurement here a practitioner can make without a benchmark.
 
 ## References
 

@@ -8,10 +8,10 @@ series:
   part: 2
 ---
 
-The following discussion maintains that the position of information within a long context
-is a design decision rather than a matter of convenience, and that the mechanism carrying
-information out of a context into an output is narrow enough, and fails badly enough, to
-justify specific changes in how an agentic coding prompt is assembled. It will be shown
+Where information sits in a long context is a design decision rather than a matter of
+convenience, and the mechanism carrying that information out into an output is narrow
+enough, and fails badly enough, to justify specific changes in how an agentic coding
+prompt is assembled. It will be shown
 that position materially changes whether a model uses information, under an experimental
 design that holds the content constant. Next, it will be argued that this is not remedied
 by using a model trained or marketed for long contexts, and that the effect persists in
@@ -37,7 +37,7 @@ which removes the obvious confound that harder questions might be placed further
 report that "performance is often highest when relevant information occurs at the
 beginning or end of the input context, and significantly degrades when models must access
 relevant information in the middle of long contexts". Because content is fixed and only order
-varies, the degradation is attributable to position itself (Liu et al., 2024).
+varies, the degradation is attributable to position itself (Liu et al., 2024). Figure 1 presents the shape of that curve as Liu et al. (2024) report it.
 
 <figure>
 <svg class="dg" viewBox="0 0 620 300" role="img" aria-labelledby="ttl-u">
@@ -135,7 +135,8 @@ frequency criterion and report that these heads are universal, in that every lon
 model examined possesses such a set; sparse, at roughly three to six per cent of all
 heads; and causal, in that "completely pruning retrieval heads leads to failure in
 retrieving relevant information and results in hallucination, while pruning random
-non-retrieval heads does not affect the model's retrieval ability".
+non-retrieval heads does not affect the model's retrieval ability". The sparsity of that
+set is shown in Figure 2.
 
 <figure class="scroll">
 <svg class="dg" viewBox="0 0 620 552" role="img" aria-labelledby="ttl-rh">
@@ -1213,7 +1214,9 @@ fabrication (Wu et al., 2025).
 Everything below is an extrapolation. Every model in the cited work is an open-weight
 decoder-only model of the 2023 to 2024 generation, or a proprietary model of that period,
 and the tasks are templated retrieval tasks rather than repository edits performed over
-many turns with tools (Liu et al., 2024; Wu et al., 2025).
+many turns with tools (Liu et al., 2024; Wu et al., 2025). The ordering that follows from these results, and the budget it implies, are presented in
+Figure 3, which is an extrapolation from Liu et al. (2024) and Wu et al. (2025) rather
+than a finding of either.
 
 <figure>
 <svg class="dg" viewBox="0 0 620 330" role="img" aria-labelledby="ttl-lay">
@@ -1272,8 +1275,8 @@ most likely to displace attention from something that would have been.
 
 ### The material to cut first
 
-Because the degradation is positional rather than semantic, the decision of what to remove
-cannot be made by relevance alone. The following order has served, from first cut to last.
+Because the degradation Liu et al. (2024) report is positional rather than semantic, the
+decision of what to remove cannot be made by relevance alone. The following order has served, from first cut to last.
 
 1. Whole files where a single function was needed.
 2. Vendored or generated code, including lockfiles and protobuf output.
@@ -1331,7 +1334,8 @@ Restating the task, which has not changed:
   Do not modify parse_test.go. Report the diff and the test output.
 ```
 
-The same reasoning applies to context compaction and to subagents. A summary that
+The same reasoning applies to context compaction and to subagents, since both rewrite the
+middle of a context that Liu et al. (2024) found to be its weakest region. A summary that
 preserves the substance of the middle while dropping the opening constraints and the
 closing restatement has discarded the two regions the evidence says are most used, and a
 subagent launched with only the middle inherits a context with no anchor at either end.
@@ -1356,7 +1360,8 @@ grep -oE '\b[A-Z][A-Za-z0-9]+\(' agent-output.txt | tr -d '(' | sort -u |
   done
 ```
 
-Two properties make this worth automating rather than eyeballing. The failure is silent,
+Two properties make this worth automating rather than eyeballing, both of them
+consequences of the sparsity Wu et al. (2025) report. The failure is silent,
 since a fabricated path is syntactically indistinguishable from a real one; and it becomes
 more likely precisely as the context grows, which is the regime in which an operator is
 least inclined to read carefully.
@@ -1375,9 +1380,9 @@ least inclined to read carefully.
 
 ## Conclusion
 
-It was first established that the position of information within a long context materially
-changes whether a model uses it, under a design that holds content constant and permutes
-only order. Next, it was shown that adopting an extended-context variant does not remedy
+This discussion first defined position as a causal variable rather than an incidental
+one, under a design that holds content constant and permutes only order. Secondly, it was
+shown that adopting an extended-context variant does not remedy
 this, with the positional profiles of models and their long-context variants essentially
 superimposed, and that the degradation persists in current models under harder
 evaluations. It was then argued that the copying of context into output is carried by a
@@ -1385,13 +1390,12 @@ sparse, universal and causally established set of retrieval heads, that pruning 
 produces fabrication while pruning as many random heads does not, and that chain-of-thought
 prompting depends on this same machinery. Finally, a context budget was set out,
 together with a cutting order, a verbatim block, the practice of restating the task last,
-and an existence check to run over an agent's output, all of it marked as extrapolation. A common thread running through these findings is that the
-constraint is not how much context a model can be given but which parts of it the model can
-still reach, and that the two have been conflated in practice. As a next step, the
-distinction between literal copying and context-grounded synthesis deserves attention from
-practitioners, because the detection criterion behind the retrieval-head result covers only
-the former while an agent writing new code consistent with a file it has read is doing the
-latter.
+and an existence check to run over an agent's output, all of it marked as extrapolation. From these four points it can be concluded that the constraint is not how
+much context a model can be given but which parts of it the model can still reach, and
+that the two have been conflated in practice. In sum, the distinction between literal
+copying and context-grounded synthesis is the one worth holding onto, because the
+detection criterion behind the retrieval-head result covers only the former while an
+agent writing new code consistent with a file it has read is doing the latter.
 
 [The third note](/blog/surface-form-self-repair-and-the-limits-of-circuit-evidence/) takes up what these results do not license, and why the surface form
 of a prompt turns out to be a causal input rather than decoration. [The first](/blog/induction-heads-function-vectors-and-demonstrations/) covered

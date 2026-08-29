@@ -5,10 +5,11 @@ pubDate: 2026-08-29
 tags: ["algorithms", "prompting", "agents"]
 ---
 
-The following discussion maintains that the elementary vocabulary of data structures and
-algorithms describes the constraints on prompting more accurately than the vocabulary of
-instruction and persuasion does, and that one part of this correspondence is a theorem rather
-than an analogy. It will be shown that a transformer's single forward pass is a bounded-depth
+The following discussion defines the correspondence between the elementary vocabulary of
+data structures and algorithms and the constraints that actually bind a prompt. The claim
+it maintains is that this vocabulary describes those constraints more accurately than the
+vocabulary of instruction and persuasion does, and that one part of the correspondence is
+a theorem rather than an analogy. It will be shown that a transformer's single forward pass is a bounded-depth
 parallel computation, which places a hard ceiling on how many steps it can compose before
 emitting a token. Next, it will be argued that intermediate generation lifts that ceiling by
 an amount proportional to the number of steps generated, and that this has been characterised
@@ -33,8 +34,7 @@ about difficulty but about composition. A constant-depth circuit cannot chain an
 number of dependent steps regardless of its width (Merrill & Sabharwal, 2023). Merrill and Sabharwal (2024)
 give the concrete cases, noting that problems as simple as checking whether two nodes in a
 graph are connected, or simulating a finite-state machine, are provably beyond a standard
-transformer that answers immediately after reading its input. Figure 1 sets out the shape of
-the limit. In sum, the constraint on a single pass is serial rather than quantitative,
+transformer that answers immediately after reading its input. Figure 1 presents the shape of the limit. In sum, the constraint on a single pass is serial rather than quantitative,
 because width and parameter count do not substitute for depth.
 
 <figure>
@@ -109,8 +109,7 @@ transformers reduce multi-step reasoning to linearised subgraph matching rather 
 developing a general procedure. That mechanism predicts exactly the observed decay (Dziri et
 al., 2023). Press et al. (2023) established a complementary result under the name of the
 compositionality gap, finding that models answer the constituent sub-questions of a
-multi-hop question correctly while failing to compose those answers. Figure 2 sets out the
-relationship. Therefore the practical failure mode is not ignorance of the parts but an
+multi-hop question correctly while failing to compose those answers. Figure 2 shows the relationship. Therefore the practical failure mode is not ignorance of the parts but an
 inability to chain them, because the parts are answered correctly in the same studies that
 find the chain broken.
 
@@ -171,8 +170,9 @@ external structure is the file system, which functions as memory that survives t
 can be written to deliberately. A result computed once and written to a file is the
 memoisation of an expensive call, and re-deriving it in a later turn is the recomputation
 that memoisation exists to avoid. Xia et al. (2025) rely on exactly this arrangement, since
-their pipeline carries state between phases rather than holding it in one conversation. In sum, the ordinary cost model of a memory hierarchy applies to
-an agent context, because access is neither free nor uniform.
+their pipeline carries state between phases rather than holding it in one conversation. The positional cost itself is presented in Figure 3. In sum, the ordinary cost model of
+a memory hierarchy applies to an agent context, because access is neither free nor
+uniform.
 
 <figure>
 <svg class="dg" viewBox="0 0 620 210" role="img" aria-labelledby="ttl-ctx">
@@ -238,20 +238,18 @@ particular instance of them has been validated for coding work.
 
 ## Conclusion
 
-It was first established that a single forward pass is a bounded-depth parallel computation
-which sits inside uniform TC0 for log-precision models, and that this limits composition
-rather than difficulty. Next, intermediate generation was presented as the resource that lifts
-the ceiling, with logarithmic steps adding little, linear steps adding the regular languages,
-and polynomial steps characterising exactly the polynomial-time solvable problems. It was then
-shown that measured accuracy falls as compositional depth rises, and that models answer
-sub-questions correctly while failing to compose them. Finally, the data-structure half was
+This discussion first defined the single forward pass as a bounded-depth parallel
+computation which sits inside uniform TC0 for log-precision models, and which is therefore
+limited in composition rather than in difficulty. Secondly, intermediate generation was
+explained as the resource that lifts the ceiling, with logarithmic steps adding little, linear steps adding the regular languages,
+and polynomial steps characterising exactly the polynomial-time solvable problems. Thirdly, the empirical decay was described: measured accuracy falls as compositional depth
+rises, and models answer sub-questions correctly while failing to compose them. Finally, the data-structure half was
 set out — non-uniform access cost across the context, the file system as external memory,
 sampling as randomised search, and checking as the cheap half of an asymmetric pair — together
 with the boundary of the correspondence. A common thread running through these results is that
 the quantity a prompt manipulates is serial steps and their ordering, rather than emphasis or
-tone, because every result above is stated in terms of steps, positions and costs. As a next
-step, a practitioner should take one task their agent reliably fails and count the dependent
-steps it requires, because that count is the first quantity the literature above says will
+tone, because every result above is stated in terms of steps, positions and costs. In sum, the first quantity to measure on a task an agent reliably fails is the number of
+dependent steps it requires, because that count is the one the literature above says will
 matter.
 
 ## References

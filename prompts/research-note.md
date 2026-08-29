@@ -264,7 +264,7 @@ BAN = [r'\byou\b', r'\byour\b', r"\bdon't\b", r"\bit's\b", r'\bcomplex\b',
        r'\borganize', r'\banalyze', r'\bcolor\b']
 def prose(p):
     s = open(p).read()
-    for pat in [r'^---.*?\n---\n', r'<figure>.*?</figure>', r'<aside.*?</aside>',
+    for pat in [r'^---.*?\n---\n', r'<figure[^>]*>.*?</figure>', r'<aside[^>]*>.*?</aside>',
                 r'<div class="tenet">.*?</div>', r'<ol class="refs">.*?</ol>', r'`{3}.*?`{3}']:
         s = re.sub(pat, '', s, flags=re.S)
     for pat in [r'^\|.*$', r'^#{1,6} .*$', r'^\d+\. .*$']:

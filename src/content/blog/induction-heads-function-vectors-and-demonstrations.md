@@ -8,11 +8,11 @@ series:
   part: 1
 ---
 
-The following discussion maintains that the mechanistic interpretability literature
-supports a narrow but genuine set of recommendations about how demonstrations should be
-written into an agentic coding prompt, and that the popular inference drawn from that
-literature — that in-context learning is essentially pattern completion — is stronger
-than the evidence permits. It will be shown that induction heads are a replicated,
+The following discussion will synthesise what the mechanistic interpretability
+literature has established about the demonstrations written into an agentic coding
+prompt, including the reasons why the popular inference drawn from that literature —
+that in-context learning is essentially pattern completion — is stronger than the
+evidence permits. It will be shown that induction heads are a replicated,
 causally tested mechanism for literal pattern completion, defined by what they do
 mechanically rather than by the task they assist. Next, it will be argued that the
 further step from induction heads to in-context learning in general is the original
@@ -36,7 +36,7 @@ previous tokens that were followed by the current and/or recent tokens", and cop
 which "the head's output increases the logit corresponding to the attended-to token".
 Neither property refers to meaning, to task, or to instruction (Olsson et al., 2022). Consequently, a head
 either satisfies the definition on a given input or it does not, and any laboratory with
-access to a model's attention patterns can check the question independently.
+access to a model's attention patterns can check the question independently. Figure 1 shows the two-layer composition that definition describes (Olsson et al., 2022).
 
 <figure>
 <svg class="dg" viewBox="0 0 620 296" role="img" aria-labelledby="ttl-ind">
@@ -76,7 +76,9 @@ operational definition covers; it is not a claim about how the mechanism behaves
 longer or noisier patterns. Drawn from the mechanism as specified in Olsson et al. (2022).</figcaption>
 </figure>
 
-Three lines of evidence support the mechanism beyond mere identification. Firstly, Olsson
+Three lines of evidence support the mechanism beyond mere identification, and they were
+produced by different groups using different methods (Olsson et al., 2022; Bietti et al.,
+2023; Reddy, 2024). Firstly, Olsson
 et al. (2022) report a discrete phase change during training, in which induction heads
 form abruptly and the model's ability to use long contexts improves in the same narrow
 window. Secondly, the same authors report that "when we directly 'knock out' induction
@@ -132,7 +134,8 @@ at all raises GPT-J from 5.5 per cent to 57.5 per cent, GPT-NeoX-20B from 6.7 to
 cent, and Llama-2-70B from 8.2 to 83.8 per cent. Moreover, Hendel, Geva and Globerson
 (2023) reach a concordant conclusion by an independent route, and Yin and Steinhardt
 (2025) find that it is precisely these heads, rather than induction heads, that carry most
-of the few-shot effect in larger models.
+of the few-shot effect in larger models. The extraction and transplantation of that representation, as carried out by Todd et al.
+(2024), is presented in Figure 2.
 
 <figure>
 <svg class="dg" viewBox="0 0 620 236" role="img" aria-labelledby="ttl-fv">
@@ -209,7 +212,8 @@ Everything below is an extrapolation. Every study cited above used base models o
 word-level tasks or on synthetic sequences, none larger than seventy billion parameters,
 and none used a tool-using agent on a repository (Olsson et al., 2022; Todd et al., 2024).
 What follows is therefore a set of defaults worth adopting until a practitioner's own
-evaluation set says otherwise, rather than a set of engineering constraints.
+evaluation set says otherwise, rather than a set of engineering constraints. Figure 3 places the two mechanisms against the scale at which each was actually measured
+(Olsson et al., 2022; Todd et al., 2024).
 
 <figure>
 <svg class="dg" viewBox="0 0 620 258" role="img" aria-labelledby="ttl-block">
@@ -346,7 +350,8 @@ Further cases, same form:
     ParseHost     -> {"host-port", "a:80", ...}, {"missing-port", "a", ...}
 ```
 
-Three properties of that block are load-bearing. The constraints are stated rather than
+Three properties of that block are load-bearing, and each follows from the task-encoding
+account rather than from the pattern-completion one (Todd et al., 2024). The constraints are stated rather than
 demonstrated, which keeps the abstract material out of the mechanism that handles it
 worst. Exactly one example is given in full, so that the form is unambiguous. The
 remaining cases are compressed to their varying part alone, which preserves consistency
@@ -361,8 +366,8 @@ the averaging argument supports. In practice the binding constraint is consisten
 count, and the operative rule is therefore to remove any example that does not match the
 form rather than to add a further one that does.
 
-Where a codebase genuinely contains several legitimate forms, the correct move is to split
-them into separate named blocks rather than to present a mixed set, because a mixed set
+Where a codebase genuinely contains several legitimate forms, the reasoning in Todd et al.
+(2024) suggests splitting them into separate named blocks rather than to present a mixed set, because a mixed set
 degrades the average for both.
 
 ```markdown
@@ -387,9 +392,9 @@ The following can be run against any block before it is committed to an instruct
 
 ## Conclusion
 
-It was first established that induction heads are a replicated mechanism, defined by
-prefix matching and copying rather than by any task, whose formation coincides with a
-training phase change and whose ablation reduces in-context learning in small models.
+It was shown that induction heads are a replicated mechanism, defined by prefix
+matching and copying rather than by any task, whose formation coincides with a training
+phase change and whose ablation reduces in-context learning in small models.
 Next, it was argued that the further inference to in-context learning in general is the
 original authors' hypothesis rather than their result, and that Yin and Steinhardt (2025)
 have since contested it directly. It was then shown that function vectors provide a
@@ -397,12 +402,12 @@ better-evidenced account of what demonstrations install, namely a compact task e
 carried by roughly ten mid-layer heads that transfers into contexts sharing none of the
 demonstrations' format. Finally, a demonstration block was constructed in full, the division between what to
 demonstrate and what to state was set out, and a checklist was given, all of it marked as
-extrapolation. A common thread running through these findings is that the mechanisms are
-specific and the explanations built on them are not, and that the practitioner's leverage
-lies in the specific half. As a next step, each recommendation above should be treated as
-a hypothesis to be tested on a practitioner's own task, because the gap between a
-seventy-billion-parameter base model performing antonym mapping and an agent editing a
-repository over many turns is not one the cited literature bridges.
+extrapolation. From these four points it can be concluded that the mechanisms are specific
+and the explanations built on them are not, and that the practitioner's leverage lies in
+the specific half. Whether the defaults above are worth keeping can only be settled by a
+practitioner's own evaluation set, because the gap between a seventy-billion-parameter
+base model performing antonym mapping and an agent editing a repository over many turns
+is not one the cited literature bridges.
 
 [The second note in this series](/blog/position-retrieval-heads-and-context-ordering/) takes up where information should sit in a long
 context, and the sparse set of heads that copies it out.

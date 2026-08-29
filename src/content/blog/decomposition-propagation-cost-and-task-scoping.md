@@ -8,7 +8,7 @@ series:
   part: 1
 ---
 
-The following discussion maintains that the software-architecture literature supports a
+The following discussion will argue that the software-architecture literature supports a
 specific and well-replicated set of recommendations about how a single agentic coding task
 should be scoped, and that the popular inference drawn from that literature — that a
 codebase scoring well on design-quality metrics is thereby easier for an agent to change —
@@ -39,8 +39,7 @@ The demonstration is carried out on a small indexing system, for which Parnas (1
 enumerates five anticipated changes and traces each through two competing decompositions.
 Under the processing-step decomposition, altering the decision to hold lines in core
 reaches nearly every module in the system. Under the decomposition organised around hidden
-decisions, the same change is confined to the one module that owns it (Parnas, 1972). Figure 1 sets out both decompositions with a single
-change traced through each. In sum, the criterion is not that a system should have many
+decisions, the same change is confined to the one module that owns it (Parnas, 1972). Figure 1 presents both decompositions with a single change traced through each. In sum, the criterion is not that a system should have many
 modules or small ones, but that the boundaries should fall where the anticipated changes
 fall, because a boundary drawn anywhere else does not contain a change.
 
@@ -111,7 +110,7 @@ propagation cost was nonetheless around a third of Mozilla's (MacCormack, Rusnak
 2006). The same authors report a
 longitudinal case in which a deliberate redesign of Mozilla cut propagation cost from 17.35
 per cent to 2.78 per cent while roughly halving the raw dependency count, from 6,717 to
-3,037 (MacCormack, Rusnak & Baldwin, 2006). Figure 2 sets the three states side by side.
+3,037 (MacCormack, Rusnak & Baldwin, 2006). The three states are set side by side in Figure 2.
 Accordingly, dependency density is not a proxy for how far a change travels, because the
 two moved in opposite directions in the one case where both were measured.
 
@@ -194,7 +193,7 @@ effort, which is an effect in the opposite direction to the folklore (Sjøberg e
 The pattern is not confined to smells. El Emam et al. (2001) demonstrated that class size
 confounds the validation of object-oriented design metrics, reproducing the standard positive
 result for the Chidamber and Kemerer suite when size is left uncontrolled. Controlling for it
-changed which metrics remained validated predictors (El Emam et al., 2001). Figure 3 sets out the structure of that confound.
+changed which metrics remained validated predictors (El Emam et al., 2001). Figure 3 shows the structure of that confound.
 In sum, size and change history carry the predictive weight that design indicators are
 usually credited with, because the indicators lose significance precisely when those two
 variables are entered.
@@ -290,6 +289,9 @@ because it varies with every one.
 
 ### A worked scoping block
 
+Figure 4 presents the four parts such a block carries, and the block below fills them
+in for one concrete change.
+
 <figure>
 <svg class="dg" viewBox="0 0 620 268" role="img" aria-labelledby="ttl-scope">
 <title id="ttl-scope">The anatomy of a scoped agent task</title>
@@ -357,12 +359,12 @@ their association with maintenance effort once file size and change count are co
 and that the strongest objection to this reading, from Evanco (2003), bears on fault
 prediction rather than on effort. Finally, a scoping block was constructed in full, the
 division between task and standing constraint was set out, and a checklist was given, all
-of it marked as extrapolation. A common thread running through these findings is that the
-quantity which predicts trouble is reach, meaning how far a change can travel, rather than
-any static property of the code it travels through. A task scoped to a boundary is a way of
-bounding reach before the work starts. As a next step, each recommendation above should be
-treated as a hypothesis to test against a practitioner's own repository, because the
-studies cited measured human maintainers on systems that no agent was involved in building.
+of it marked as extrapolation. Through these four points it was established that the quantity which predicts trouble is
+reach, meaning how far a change can travel, rather than any static property of the code it
+travels through, and that a task scoped to a boundary bounds reach before the work starts.
+As a next step, each recommendation above should be treated as a hypothesis to test
+against a practitioner's own repository, because the studies cited measured human
+maintainers on systems that no agent was involved in building.
 
 [The second note in this series](/blog/retrieval-co-change-and-context-assembly/) takes up
 which files should actually be handed to an agent, and what the retrieval evidence says

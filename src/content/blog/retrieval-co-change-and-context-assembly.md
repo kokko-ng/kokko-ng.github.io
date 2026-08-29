@@ -8,10 +8,12 @@ series:
   part: 2
 ---
 
-The following discussion maintains that the file-selection step, rather than the generation
-step, is where a large and measured share of agentic coding failure currently sits, and that
-the popular inference — that a longer context window dissolves the problem — is contradicted
-by the same measurements that establish it. It will be shown that supplying the correct files
+The following discussion outlines what has been measured about the file-selection step in
+agentic coding, summarises the failure rates that step actually carries, and analyses what
+those rates imply for the way a context is assembled. Its position is that selection
+rather than generation is where a large and measured share of failure currently sits, and
+that the popular inference — that a longer context window dissolves the problem — is
+contradicted by the same measurements that establish it. It will be shown that supplying the correct files
 outright more than doubles issue-resolution rates on a standard benchmark, which places the
 bottleneck in retrieval rather than in editing. Next, it will be argued that localisation
 over an explicit repository structure outperforms embedding-based retrieval, and that the two
@@ -36,8 +38,7 @@ under an oracle condition handing over the files the human patch had touched the
 resolved 4.8 per cent. The retrieval condition itself is
 unreliable in a way that explains the gap. Jimenez et al. (2024) report that at a 27,000
 token limit their sparse retriever returned a superset of the oracle files in roughly forty
-per cent of instances, and returned none of the oracle files in almost half. Figure 1 sets
-the two conditions side by side. In sum, a substantial share of measured agent failure is a
+per cent of instances, and returned none of the oracle files in almost half. The two conditions are presented side by side in Figure 1. In sum, a substantial share of measured agent failure is a
 failure to find the right files, because performance more than doubles when finding them is
 removed from the task.
 
@@ -96,7 +97,7 @@ skeleton of each candidate file's class, function and variable declarations, and
 the selected code itself (Xia et al., 2025). Measured against the ground-truth file,
 prompting the model over that structure located the correct file 78.7 per cent of the time
 against 67.7 per cent for embedding-based retrieval, and combining the two reached 81.7 per
-cent (Xia et al., 2025). Figure 2 sets out the narrowing. Consequently, the productive move
+cent (Xia et al., 2025). Figure 2 presents the narrowing. Consequently, the productive move
 is to give the model a map before giving it territory, because a map of the whole repository
 costs less context than a sample of it and localises better.
 
@@ -135,7 +136,7 @@ sharing an import or a directory with the target. That result invites an obvious
 optimisation, which the same authors tested and rejected. Zhang et al. (2023) report that
 restricting retrieval in advance to structurally defined locations — imported files, the
 same directory, similar imports, similar names — degraded performance relative to
-unrestricted similarity search over the repository. Figure 3 sets out the asymmetry.
+unrestricted similarity search over the repository. Figure 3 shows the asymmetry.
 Accordingly, adjacency is a property of the answer rather than a method for finding it,
 because the search that finds those files also finds the ones the structural rule excludes.
 
@@ -186,7 +187,7 @@ changed entity, a genuinely related further location appeared in the top three s
 more than seventy per cent of the time. Zimmermann et al. (2004) further report that the couplings recovered include ones no
 compiler could find, among them cross-language interface and implementation pairs, and
 relations between code and non-program artefacts such as documentation.
-Figure 4 sets the two coupling relations against each other. In sum, co-change is a distinct
+The two coupling relations are set against each other in Figure 4. In sum, co-change is a distinct
 evidence source rather than an approximation of the dependency graph, because it detects
 relations that have no representation in the graph.
 
@@ -309,8 +310,8 @@ have drifted since the claim was written.
 
 ## Conclusion
 
-It was first established that supplying the correct files more than doubles issue resolution
-on a standard benchmark, and that the retriever used in that benchmark returns none of the
+This discussion first set out the finding that supplying the correct files more than
+doubles issue resolution on a standard benchmark, and that the retriever used in that benchmark returns none of the
 needed files in almost half of instances, which places a large share of failure before the
 edit. Next, structure-first localisation was presented as measurably better than embedding
 retrieval and complementary to it, with the narrowing from tree to skeleton to code as the
@@ -319,12 +320,11 @@ completion is overwhelmingly adjacent, and yet that imposing adjacency as a retr
 lowers performance, so adjacency describes the answer without providing the method. Finally,
 evolutionary coupling was presented as an evidence source that static analysis cannot
 replicate, bounded by a precision that makes it a suggestion rather than a gate, and an
-assembly procedure was constructed and marked as extrapolation. A common thread running
-through these findings is that context is a selection problem rather than a capacity problem,
-because every result above got worse when unselected material was added. As a next step, the
-retrieval step in a practitioner's own workflow should be measured directly against known
-answers, because none of the benchmarks cited was built from a repository the practitioner
-maintains.
+assembly procedure was constructed and marked as extrapolation. From these four points it can be concluded that context is a selection problem rather than
+a capacity problem, because every result above got worse when unselected material was
+added. Whether the assembly order given here is the right one can only be settled by
+measuring a practitioner's own retrieval step against known answers, because none of the
+benchmarks cited was built from a repository the practitioner maintains.
 
 [The third note in this series](/blog/architectural-decisions-debt-and-verification/) takes
 up what should be written down for an agent to read, and why a passing test suite is weaker
