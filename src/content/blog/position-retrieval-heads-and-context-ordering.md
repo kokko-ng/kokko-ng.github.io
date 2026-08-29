@@ -77,14 +77,14 @@ and some models show recency without primacy.</figcaption>
 </figure>
 
 Two independent lines of work strengthen the result rather than merely repeating it.
-Hsieh et al. (2024) examine the attention distribution directly and find that models
+Hsieh, Chuang et al. (2024) examine the attention distribution directly and find that models
 "exhibit a U-shaped attention bias where the tokens at the beginning and at the end of its
 input receive higher attention, regardless of their relevance", which supplies a
 mechanism-level correlate of the behavioural finding; it must be noted that this
-attention-level claim belongs to Hsieh et al. and not to Liu et al., who measured accuracy
-only. Furthermore, Xiao et al. (2025) reproduce primacy, recency and the resulting shape
-in models trained from scratch on synthetic retrieval data, which answers the objection
-that the effect might be an artefact of the pretraining corpus rather than of the
+attention-level claim belongs to Hsieh, Chuang et al. and not to Liu et al., who measured accuracy
+only. Furthermore, Salvatore, Wang and Zhang (2025) reproduce primacy, recency and the resulting
+shape in models trained from scratch on synthetic retrieval data, which answers the
+objection that the effect might be an artefact of the pretraining corpus rather than of the
 architecture and training procedure.
 
 It must be noted that the effect is less uniform than its popular summary suggests.
@@ -94,7 +94,7 @@ close to flat on synthetic key-value retrieval — and a distinct U-shape is the
 observed consistently across models. Accordingly, the defensible statement is that position
 materially affects retrievability and that the shape of the effect varies by model, rather
 than the stronger and more quotable claim that a U-curve always obtains (Liu et al., 2024;
-Hsieh et al., 2024).
+Hsieh, Chuang et al., 2024).
 
 ## A longer context window does not remedy it
 
@@ -111,9 +111,9 @@ Provisioning a larger window is procurement; deciding what occupies it is engine
 evidence bears on the second and is silent on the first.</p></aside>
 
 The persistence of the effect in more recent models has been established under harder
-evaluations than the original. Hsieh et al. (2024) and the RULER benchmark find that only
-about half of the models tested maintain satisfactory performance at a context length of
-thirty-two thousand tokens, despite claiming far longer windows. Moreover, Modarressi et
+evaluations than the original. The RULER benchmark of Hsieh, Sun et al. (2024), which evaluates
+seventeen models on tasks harder than simple retrieval, finds that only half of them maintain satisfactory performance
+at a context length of thirty-two thousand tokens, despite claiming far longer windows. Moreover, Modarressi et
 al. (2025) report that eleven of thirteen models claiming at least a hundred and
 twenty-eight thousand tokens fall below half of their short-context baseline at
 thirty-two thousand tokens, with GPT-4o declining from 99.3 to 69.7 per cent. It should be
@@ -1179,9 +1179,9 @@ performance below fifty for every model tested, and that on held-out extractive 
 answering, masking retrieval heads costs 9.2 and 23.1 per cent F1 while masking the same
 number of random non-retrieval heads shows no significant impact. The result holds across
 Llama-2 at several sizes and context lengths, Mistral-7B, Mixtral-8x7B, Yi at 6B and 34B,
-and Qwen1.5-14B. In addition, Zhang et al. (2024) independently re-derive the same head
-population by attention knockout and activation patching, concluding that the heads are
-necessary and explain model performance although they are not entirely sufficient.
+and Qwen1.5-14B. In addition, Zhao, Yin and Durrett (2025) independently re-derive the same head population
+by attention knockout and activation patching, concluding that the heads are necessary and
+explain model performance although they are not entirely sufficient.
 
 <div class="tenet">
 <p class="label">What the evidence supports</p>
@@ -1300,10 +1300,11 @@ induction heads and function vectors.
 ## References
 
 <ol class="refs">
+<li>Hsieh, C.-P., Sun, S., Kriman, S., Acharya, S., Rekesh, D., Jia, F., Zhang, Y., &amp; Ginsburg, B. (2024). RULER: what&rsquo;s the real context size of your long-context language models? <a href="https://arxiv.org/abs/2404.06654">arXiv:2404.06654</a>.</li>
 <li>Hsieh, C.-Y., Chuang, Y.-S., Li, C.-L., Wang, Z., Le, L. T., Kumar, A., et al. (2024). Found in the middle: calibrating positional attention bias improves long context utilization. <em>Findings of ACL 2024</em>. <a href="https://arxiv.org/abs/2406.16008">arXiv:2406.16008</a>.</li>
 <li>Liu, N. F., Lin, K., Hewitt, J., Paranjape, A., Bevilacqua, M., Petroni, F., &amp; Liang, P. (2024). Lost in the middle: how language models use long contexts. <a href="https://aclanthology.org/2024.tacl-1.9/"><em>Transactions of the Association for Computational Linguistics</em>, 12, 157-173</a>.</li>
 <li>Modarressi, A., Deilamsalehy, H., Dernoncourt, F., Bui, T., Rossi, R. A., Yoon, S., &amp; Schütze, H. (2025). NoLiMa: long-context evaluation beyond literal matching. <a href="https://arxiv.org/abs/2502.05167">arXiv:2502.05167</a>.</li>
 <li>Wu, W., Wang, Y., Xiao, G., Peng, H., &amp; Fu, Y. (2025). Retrieval head mechanistically explains long-context factuality. <em>International Conference on Learning Representations</em>. <a href="https://arxiv.org/abs/2404.15574">arXiv:2404.15574</a>.</li>
-<li>Xiao, C., Cai, X., Zhao, W., Ye, Y., Wang, X., Wang, Z., et al. (2025). On the emergence of position bias in transformers. <a href="https://arxiv.org/abs/2510.10276">arXiv:2510.10276</a>.</li>
-<li>Zhang, Y., Li, Y., Wang, Z., Cui, S., Chen, W., Zhang, Y., et al. (2024). Attention entropy and retrieval heads in long-context language models. <a href="https://arxiv.org/abs/2410.22316">arXiv:2410.22316</a>.</li>
+<li>Salvatore, N., Wang, H., &amp; Zhang, Q. (2025). Lost in the middle: an emergent property from information retrieval demands in LLMs. <a href="https://arxiv.org/abs/2510.10276">arXiv:2510.10276</a>.</li>
+<li>Zhao, X., Yin, F., &amp; Durrett, G. (2025). Understanding synthetic context extension via retrieval heads. <em>International Conference on Machine Learning</em>. <a href="https://arxiv.org/abs/2410.22316">arXiv:2410.22316</a>.</li>
 </ol>

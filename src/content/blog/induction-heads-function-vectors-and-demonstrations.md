@@ -201,9 +201,9 @@ indeed, evidenced against — for abstract behavioural instruction.
 
 ## What this licenses in an agentic coding prompt
 
-The recommendations that follow are extrapolations, because every study cited above used base models between six and
-seventy billion parameters on short, word-level tasks, and none used a tool-using agent on
-a repository (Olsson et al., 2022; Todd et al., 2024). They are
+The recommendations that follow are extrapolations, because every study cited above used base models on short, word-level
+tasks or on synthetic sequences, none larger than seventy billion parameters, and none used
+a tool-using agent on a repository (Olsson et al., 2022; Todd et al., 2024). They are
 offered as hypotheses to be tested against a practitioner's own evaluation set rather than
 as engineering constraints.
 
@@ -291,7 +291,7 @@ context, and the sparse set of heads that copies it out.
 
 <ol class="refs">
 <li>Bietti, A., Cabannes, V., Bouchacourt, D., Jegou, H., &amp; Bottou, L. (2023). Birth of a transformer: a memory viewpoint. <em>Advances in Neural Information Processing Systems 36</em>.</li>
-<li>Brumley, M., Kwon, J., Krueger, D., Kirk, H. R., &amp; Minervini, P. (2024). Comparing bottom-up and top-down steering approaches on in-context learning tasks. <a href="https://arxiv.org/abs/2411.07213">arXiv:2411.07213</a>.</li>
+<li>Brumley, M., Kwon, J., Krueger, D., Krasheninnikov, D., &amp; Anwar, U. (2024). Comparing bottom-up and top-down steering approaches on in-context learning tasks. <a href="https://arxiv.org/abs/2411.07213">arXiv:2411.07213</a>.</li>
 <li>Crosbie, J., &amp; Shutova, E. (2025). Induction heads as an essential mechanism for pattern matching in in-context learning. <a href="https://aclanthology.org/2025.findings-naacl.283/"><em>Findings of NAACL 2025</em></a>.</li>
 <li>Hendel, R., Geva, M., &amp; Globerson, A. (2023). In-context learning creates task vectors. <em>Findings of EMNLP 2023</em>.</li>
 <li>Olsson, C., Elhage, N., Nanda, N., Joseph, N., DasSarma, N., Henighan, T., et al. (2022). In-context learning and induction heads. <em>Transformer Circuits Thread</em>. <a href="https://arxiv.org/abs/2209.11895">arXiv:2209.11895</a>.</li>

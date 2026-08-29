@@ -89,8 +89,11 @@ than by hand; Tigges et al. (2024) find the same algorithm across the Pythia fam
 160M to 2.8B parameters and across training; and Merullo et al. (2024) find the same
 inhibition and mover machinery reused on an unrelated coloured-objects task, which is
 itself evidence that the mechanism is repetition and position routing rather than anything
-specific to indirect objects. Furthermore, Nainani et al. (2024) independently reproduce
-the degradation under duplication and localise it to the inhibition heads.
+specific to indirect objects. Furthermore, Nainani et al. (2024) examine the circuit across prompt variants, including one
+that duplicates the indirect object, and find that it reuses all of its components while
+adding input edges, identifying a further mechanism they name S2 hacking — which indicates
+that the routing adapts to the repetition structure rather than simply failing when that
+structure changes.
 
 It must be noted that the ceiling on this claim is low in three respects. The model is
 GPT-2 small at 117 million parameters on a synthetic templated task; the inhibition signal
@@ -384,7 +387,7 @@ the workload that actually matters.
 <li>McGrath, T., Rahtz, M., Kramar, J., Mikulik, V., &amp; Legg, S. (2023). The hydra effect: emergent self-repair in language model computations. <a href="https://arxiv.org/abs/2307.15771">arXiv:2307.15771</a>.</li>
 <li>Merullo, J., Eickhoff, C., &amp; Pavlick, E. (2024). Circuit component reuse across tasks in transformer language models. <em>International Conference on Learning Representations</em>.</li>
 <li>Miller, J., Chughtai, B., &amp; Saunders, W. (2024). Transformer circuit faithfulness metrics are not robust. <em>Conference on Language Modeling</em>. <a href="https://arxiv.org/abs/2407.08734">arXiv:2407.08734</a>.</li>
-<li>Nainani, J., Wang, S., Chen, J., &amp; Mueller, A. (2024). Adaptive circuit behavior and generalization in mechanistic interpretability. <a href="https://arxiv.org/abs/2411.16105">arXiv:2411.16105</a>.</li>
+<li>Nainani, J., Vaidyanathan, S., Yeung, A., Gupta, K., &amp; Jensen, D. (2024). Adaptive circuit behavior and generalization in mechanistic interpretability. <a href="https://arxiv.org/abs/2411.16105">arXiv:2411.16105</a>.</li>
 <li>Rushing, C., &amp; Nanda, N. (2024). Explorations of self-repair in language models. <em>International Conference on Machine Learning</em>. <a href="https://arxiv.org/abs/2402.15390">arXiv:2402.15390</a>.</li>
 <li>Shi, C., Beltran-Velez, N., Nazaret, A., Zheng, C., Garriga-Alonso, A., Jesson, A., et al. (2024). Hypothesis testing the circuit hypothesis in LLMs. <em>Advances in Neural Information Processing Systems 37</em>. <a href="https://arxiv.org/abs/2410.13032">arXiv:2410.13032</a>.</li>
 <li>Syed, A., Rager, C., &amp; Conmy, A. (2024). Attribution patching outperforms automated circuit discovery. <em>BlackboxNLP at EMNLP 2024</em>.</li>
