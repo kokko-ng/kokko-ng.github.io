@@ -8,7 +8,7 @@ export const site = {
   positioning:
     "I build systems from first principles to understand how they actually work.",
   intro:
-    "Building from first principles means implementing a system from its smallest working parts, rather than assembling it from abstractions someone else wrote. That is how I learn. These pages document the method applied to data structures, computer architecture, and developer tooling: each project is set out with the reasoning that produced it, and each note records what I found, including the results I did not expect.",
+    "I work on cloud engineering and agentic developer workflows at Insight Enterprises in Singapore. Outside that I build things from their smallest working parts \u2014 data structures, an 8-bit computer, developer tooling \u2014 because implementing a system is the only way I reliably understand it. The projects here set out how each one was built; the notes set out what I read to get there.",
   description:
     "Projects and notes by Kokko Ng, an engineer in Singapore, on data structures, computer architecture, and agentic developer tooling.",
   quote: "If you run, you gain one. If you move forward, you gain two.",
@@ -19,16 +19,16 @@ export const site = {
   ],
   /** Three short lines on the home page. Set to [] to hide the block. */
   now: [
-    { label: "Building", text: "An 8-bit computer, one register at a time." },
+    { label: "Building", text: "An 8-bit computer." },
     { label: "Working on", text: "Cloud engineering and agentic developer workflows on Azure." },
-    { label: "Writing about", text: "What only becomes clear once the system is built." },
+    { label: "Reading", text: "Mechanistic interpretability, and what it does and does not support about prompting." },
   ],
   /** Roadmap line at the top of each index page. */
   intros: {
     projects:
       "Each of these exists to understand a system by implementing it rather than configuring it. Every entry carries a note on why it was worth building.",
     blog:
-      "These notes were written during the builds listed under Projects. They record what I found, and in particular the results I did not expect.",
+      "These are AI-generated research notes, written to teach myself a subject properly rather than leave it as a half-read pile of papers. Each claim is traced to a primary source and the gaps are stated outright. Published in case they are useful to someone else.",
   },
 } as const;
 

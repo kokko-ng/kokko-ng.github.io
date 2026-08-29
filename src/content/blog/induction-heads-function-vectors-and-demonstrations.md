@@ -1,6 +1,6 @@
 ---
-title: "Induction Heads, Function Vectors and Why Demonstrations Work"
-description: "Two replicated mechanisms account for part of why in-context examples work, and they license a narrower set of recommendations for agentic coding prompts than the folklore assumes. First of three."
+title: "Agentic Coding x Mechanistic Interpretability pt. 1: Writing Demonstrations"
+description: "How to write the example block in a CLAUDE.md or AGENTS.md file, and what to state as a constraint instead, derived from what is actually known about how models use in-context examples."
 pubDate: 2026-08-29
 tags: ["mechanistic interpretability", "prompting", "agents"]
 ---
@@ -16,8 +16,9 @@ further step from induction heads to in-context learning in general is the origi
 authors' own hypothesis and is now contested by direct evidence. It will then be argued
 that function vectors offer a better-supported account of what a handful of
 demonstrations installs, namely a compact and portable encoding of the task itself.
-Lastly, the prompting recommendations these two mechanisms license will be set out, and
-separated from the recommendations they do not. It should be noted at the outset that
+Lastly, a demonstration block will be constructed in full, together with the division
+between what belongs in an example and what belongs in a constraint, a worked instruction
+file, and a checklist to run against a block before committing it. It should be noted at the outset that
 none of the studies cited here was conducted on a long-horizon, tool-using coding agent,
 and that every prompting recommendation below is therefore an extrapolation, marked as
 such where it appears.
@@ -199,71 +200,187 @@ high-level concepts such as sentiment transfer and detoxification. It can then b
 that the mechanism is well evidenced for concrete transformations and poorly evidenced —
 indeed, evidenced against — for abstract behavioural instruction.
 
-## What this licenses in an agentic coding prompt
+## The construction of a demonstration block
 
-The recommendations that follow are extrapolations, because every study cited above used base models on short, word-level
-tasks or on synthetic sequences, none larger than seventy billion parameters, and none used
-a tool-using agent on a repository (Olsson et al., 2022; Todd et al., 2024). They are
-offered as hypotheses to be tested against a practitioner's own evaluation set rather than
-as engineering constraints.
+Everything below is an extrapolation. Every study cited above used base models on short,
+word-level tasks or on synthetic sequences, none larger than seventy billion parameters,
+and none used a tool-using agent on a repository (Olsson et al., 2022; Todd et al., 2024).
+What follows is therefore a set of defaults worth adopting until a practitioner's own
+evaluation set says otherwise, rather than a set of engineering constraints.
 
-Firstly, demonstrations should exhibit a concrete transformation rather than describe a
-disposition, because that is the regime in which the function vector evidence is strong
-and the regime in which Brumley et al. (2024) find it degrades is precisely the abstract
-one. A demonstration of the exact shape of a commit message, a specific refactor applied to one
-function, or an exact test-naming convention is well founded; a demonstration intended to
-convey care, seniority or thoroughness is not (Brumley et al., 2024).
+<figure>
+<svg class="dg" viewBox="0 0 620 258" role="img" aria-labelledby="ttl-block">
+<title id="ttl-block">The anatomy of a demonstration block</title>
+<text class="tf" x="240" y="30" text-anchor="middle">input varies</text>
+<text class="tf" x="460" y="30" text-anchor="middle">form is identical</text>
+<rect class="box" x="150" y="44" width="180" height="30"/>
+<text class="t" x="164" y="64">TestParseTimeout</text>
+<path class="line" d="M 336 59 L 358 59"/><polygon class="arrow" points="364,59 354,55 354,63"/>
+<rect class="fill" x="370" y="44" width="180" height="30"/>
+<text class="t" x="384" y="64">table-driven, cases[]</text>
+<rect class="box" x="150" y="84" width="180" height="30"/>
+<text class="t" x="164" y="104">TestParseRetries</text>
+<path class="line" d="M 336 99 L 358 99"/><polygon class="arrow" points="364,99 354,95 354,103"/>
+<rect class="fill" x="370" y="84" width="180" height="30"/>
+<text class="t" x="384" y="104">table-driven, cases[]</text>
+<rect class="box" x="150" y="124" width="180" height="30"/>
+<text class="t" x="164" y="144">TestParseHost</text>
+<path class="line" d="M 336 139 L 358 139"/><polygon class="arrow" points="364,139 354,135 354,143"/>
+<rect class="fill" x="370" y="124" width="180" height="30"/>
+<text class="t" x="384" y="144">table-driven, cases[]</text>
+<path class="line" d="M 140 44 L 132 44 L 132 154 L 140 154"/>
+<text class="tf" x="124" y="95" text-anchor="end">demonstrations</text>
+<text class="tf" x="124" y="109" text-anchor="end">three to five</text>
+<rect class="box" x="150" y="182" width="180" height="30"/>
+<text class="t" x="164" y="202">TestParseTLS</text>
+<path class="line" d="M 336 197 L 358 197"/><polygon class="arrow" points="364,197 354,193 354,201"/>
+<rect class="hot" x="370" y="182" width="180" height="30"/>
+<text class="tr" x="384" y="202">the model continues</text>
+<path class="line" d="M 140 182 L 132 182 L 132 212 L 140 212"/>
+<text class="tf" x="124" y="201" text-anchor="end">the request</text>
+<text class="tm" x="150" y="240">The request is written in the same shape as the demonstrations, not as a</text>
+<text class="tm" x="150" y="254">separate instruction in prose.</text>
+</svg>
+<figcaption><span class="label">Figure 3</span> The shape the two mechanisms in this note
+argue for. The left column varies so that the averaged task encoding is not tied to one
+input; the right column is rigid so that the literal-copy mechanism has a regularity to
+exploit; and the request is written in the same shape rather than as a prose instruction
+appended afterwards. The figure encodes the recommendation, not a measurement.</figcaption>
+</figure>
+
+### The division between example and constraint
+
+The single most useful division is between what belongs in an example and what belongs in
+a sentence. Function vectors are well evidenced for precise, fine-grained mappings and
+poorly evidenced for high-level concepts, since Brumley et al. (2024) find that they
+excel at tasks requiring precision while struggling with abstract behavioural shifts.
+Therefore, anything that can be shown as a concrete input-output pair should be
+demonstrated, and anything that is a disposition should be written as a constraint.
+
+| Demonstrate with examples | State as a constraint |
+| --- | --- |
+| Commit message format | "Do not add a dependency not already in go.mod" |
+| A specific refactor, applied once | "Stop and report after two failures of the same test" |
+| Test naming and table structure | "Never edit files outside internal/" |
+| The exact shape of an error wrap | "Ask before changing a public interface" |
+| A log line format | "Prefer the smallest diff that passes" |
+
+The failure this division prevents is the common one of attempting to demonstrate
+seniority. A block of examples chosen to convey that an agent should be careful, thorough
+or production-minded operates in precisely the regime in which Brumley et al. (2024) find
+function vectors weakest, whereas the same intent expressed as three explicit constraints
+costs fewer tokens and can be checked mechanically.
+
+### Variation in the input, rigidity in the form
+
+Because the induction mechanism is defined over literal token matches, paraphrase is not
+guaranteed to engage it (Olsson et al., 2022), and because the function vector is computed
+by Todd et al. (2024) as an average over demonstration sets, an inconsistent set produces a
+degraded average. Consequently, the examples should differ in their inputs and be rigid in
+everything else.
 
 ```text
-Rewrite the given test to the table-driven form.
+Weak, because the form varies as much as the input:
 
-  before:
-    func TestParseTimeout(t *testing.T) {
-        got, err := ParseTimeout("30s")
-        if err != nil { t.Fatalf("ParseTimeout: %v", err) }
-        if got != 30*time.Second { t.Errorf("got %v, want 30s", got) }
-    }
+  1. internal/config/parse_test.go — convert TestParseTimeout to a table test
+  2. Please also do the retries one, using a slice of anonymous structs
+  3. TestParseHost should use subtests (t.Run) with a cases map
 
-  after:
+Stronger, because only the subject changes:
+
+  TestParseTimeout  -> cases []struct{name, in, want, wantErr} + t.Run(c.name, ...)
+  TestParseRetries  -> cases []struct{name, in, want, wantErr} + t.Run(c.name, ...)
+  TestParseHost     -> cases []struct{name, in, want, wantErr} + t.Run(c.name, ...)
+  TestParseTLS      ->
+```
+
+The trailing arrow is not decoration. Leaving the request in the same shape as the
+demonstrations, rather than restating it as a sentence in prose, is the arrangement that
+the prefix-matching and copying account most directly supports (Olsson et al., 2022).
+
+### A worked block for an agent instruction file
+
+The following is a complete demonstration block of the kind that belongs in a `CLAUDE.md`,
+`AGENTS.md` or equivalent, rather than being retyped into each session. It separates the
+three parts deliberately: constraints as prose, one full worked example, and a compressed
+table of further cases.
+
+```markdown
+## Test style
+
+Constraints:
+  - Table-driven tests only. No parallel assertions outside the table.
+  - Case names are lower-case, no spaces, describing the input, not the expectation.
+  - One t.Run per case. No shared mutable state between cases.
+
+Worked example — internal/config/parse_test.go:
+
     func TestParseTimeout(t *testing.T) {
-        cases := []struct{
-            name string
-            in   string
-            want time.Duration
+        cases := []struct {
+            name    string
+            in      string
+            want    time.Duration
             wantErr bool
         }{
             {name: "seconds", in: "30s", want: 30 * time.Second},
+            {name: "empty", in: "", wantErr: true},
         }
         for _, c := range cases {
-            t.Run(c.name, func(t *testing.T) { ... })
+            t.Run(c.name, func(t *testing.T) {
+                got, err := ParseTimeout(c.in)
+                if (err != nil) != c.wantErr {
+                    t.Fatalf("ParseTimeout(%q) err = %v, wantErr %v", c.in, err, c.wantErr)
+                }
+                if got != c.want {
+                    t.Errorf("ParseTimeout(%q) = %v, want %v", c.in, got, c.want)
+                }
+            })
         }
     }
 
-Apply the same transformation to TestParseRetries in internal/config/parse_test.go.
+Further cases, same form:
+    ParseRetries  -> {"zero", "0", 0, false}, {"negative", "-1", 0, true}
+    ParseHost     -> {"host-port", "a:80", ...}, {"missing-port", "a", ...}
 ```
 
-Secondly, demonstrations should be internally consistent in surface form, because the
-induction mechanism is defined over literal token matches, and paraphrase is therefore not
-guaranteed to engage it (Olsson et al., 2022). Where two examples show the same transformation with different import
-styles, different receiver names or different error-wrapping idioms, the surface
-regularity the copying mechanism could exploit has been removed at no benefit to the task
-encoding. In short, the examples should vary in the input and be rigid in the form.
+Three properties of that block are load-bearing. The constraints are stated rather than
+demonstrated, which keeps the abstract material out of the mechanism that handles it
+worst. Exactly one example is given in full, so that the form is unambiguous. The
+remaining cases are compressed to their varying part alone, which preserves consistency
+across the set while spending little of the context that the second note shows to be
+expensive in the middle of a long prompt.
 
-Thirdly, a small number of clean demonstrations is preferable to a large number of noisy
-ones, because the function vector is computed by Todd et al. (2024) as an average over
-demonstration sets, and an average is degraded by inconsistent members. It must be noted
-that no cited study establishes an optimal count, and that the claim here is only the
-comparative one.
+### The number of examples, and the treatment of the remainder
 
-Lastly, high-level behavioural instruction should be written as explicit constraint rather
-than demonstrated by example, since it falls outside what the evidence supports.
+Three to five is a reasonable default and no cited study establishes an optimum; the
+comparative claim, that a small consistent set beats a large inconsistent one, is the one
+the averaging argument supports. In practice the binding constraint is consistency rather than
+count, and the operative rule is therefore to remove any example that does not match the
+form rather than to add a further one that does.
 
-```text
-Constraints, which apply to every edit in this task:
-  - Do not add a dependency that is not already in go.mod.
-  - Every exported function you add carries a doc comment beginning with its name.
-  - If a test fails twice for the same reason, stop and report rather than retrying.
+Where a codebase genuinely contains several legitimate forms, the correct move is to split
+them into separate named blocks rather than to present a mixed set, because a mixed set
+degrades the average for both.
+
+```markdown
+## Error handling — library code
+    return fmt.Errorf("parse timeout %q: %w", raw, err)
+
+## Error handling — command-line entry points
+    log.Fatalf("config: %v", err)
 ```
+
+### A checklist for a demonstration block
+
+The following can be run against any block before it is committed to an instruction file.
+
+1. Every example shows the same transformation, not several related ones.
+2. The output side is byte-for-byte consistent in structure across examples.
+3. Nothing in the block is trying to convey an attitude rather than a form.
+4. The request is written in the same shape as the examples.
+5. Any example that had to be explained in prose has been either fixed or removed.
+6. The block has been read once with the examples' inputs covered, to check that the form
+   is still inferable from the outputs alone.
 
 ## Conclusion
 
@@ -275,9 +392,9 @@ original authors' hypothesis rather than their result, and that Yin and Steinhar
 have since contested it directly. It was then shown that function vectors provide a
 better-evidenced account of what demonstrations install, namely a compact task encoding
 carried by roughly ten mid-layer heads that transfers into contexts sharing none of the
-demonstrations' format. Finally, four prompting recommendations were derived and
-explicitly marked as extrapolations, together with the abstract case the evidence argues
-against. A common thread running through these findings is that the mechanisms are
+demonstrations' format. Finally, a demonstration block was constructed in full, the division between what to
+demonstrate and what to state was set out, and a checklist was given, all of it marked as
+extrapolation. A common thread running through these findings is that the mechanisms are
 specific and the explanations built on them are not, and that the practitioner's leverage
 lies in the specific half. As a next step, each recommendation above should be treated as
 a hypothesis to be tested on a practitioner's own task, because the gap between a

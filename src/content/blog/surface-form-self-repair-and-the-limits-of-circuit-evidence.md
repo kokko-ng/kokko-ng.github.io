@@ -1,6 +1,6 @@
 ---
-title: "Surface Form, Self-Repair and the Limits of Circuit Evidence"
-description: "The surface shape of a prompt is a causal input rather than decoration, models repair themselves when parts are removed, and circuit findings are fragile enough to bound every recommendation built on them. Third of three."
+title: "Agentic Coding x Mechanistic Interpretability pt. 3: Wording and Evaluation"
+description: "Deduplicating an agent context, rewriting inverted instructions so they do not read like the case they invert, and an evaluation loop that tells a prompt line that works from one that is merely being carried."
 pubDate: 2026-08-29
 tags: ["mechanistic interpretability", "prompting", "agents"]
 ---
@@ -16,9 +16,11 @@ than by inference. It will then be argued that model components are redundant an
 self-repairing, with the consequence that explanations crediting a single component, or a
 single prompt ingredient, are systematically unreliable. Following this, it will be argued
 that circuit discovery is itself methodologically fragile by its own practitioners'
-account, which bounds the standing of every finding in this series. Lastly, the
-recommendations these results license will be set out, and the substantial territory this
-review could not establish will be stated explicitly rather than passed over.
+account, which bounds the standing of every finding in this series. Lastly, four practices will be set out in
+detail — a deduplication pass over the assembled context, a rule for phrasing inverted
+instructions, an evaluation loop for a prompt change, and a changelog for an instruction
+file — and the substantial territory this review could not establish will be stated
+explicitly rather than passed over.
 
 ## Reference resolution runs on repetition, not on role
 
@@ -254,7 +256,7 @@ in a particular way inherits this fragility, and should be held with correspondi
 confidence than the underlying behavioural result on which it rests (Conmy et al., 2023;
 Miller, Chughtai and Saunders, 2024).
 
-## What these results license
+## The practice these results support
 
 The recommendations below follow from the behavioural results rather than from the circuit
 diagrams, because the behavioural results are the more robust half of each finding (Miller,
@@ -283,40 +285,153 @@ drawn as an outline because no verified finding in this review bears on it, whic
 statement about the review rather than a finding about the property.</figcaption>
 </figure>
 
-Firstly, repeated identifiers in a context should be treated as an active perturbation
-rather than as neutral filler, and deduplication should be preferred to addition. Where an old
-and a new version of the same function, a duplicated path in a directory listing, or the
-same symbol from an unrelated snippet sit together in the context, the practitioner is
-perturbing a mechanism that resolves references partly by elimination of the repeat (Wang
-et al., 2023). This
-is a second-order extrapolation with no direct empirical support at any scale, and is
-offered as the most testable of the hypotheses here.
+### Duplicate identifiers in an agent context
 
-Secondly, an inverted or unusual instruction should be made surface-distinct from the
-common case it inverts, rather than expressed as a minimal negation of it (Hanna, Liu and
-Variengien, 2023).
+Because reference resolution in the studied circuit is keyed on which token repeats (Wang
+et al., 2023), a duplicated identifier is an active perturbation rather than neutral
+filler. The duplicates that arise in a coding agent's context are predictable, and most of
+them are removable.
 
-```text
-Avoid, because the surface form matches the common case it inverts:
-  Delete the files that do NOT match internal/**/*_test.go
+| Common duplicate | Where it comes from | Remedy |
+| --- | --- | --- |
+| Two versions of one function | Pasting the file before and after an edit | Supply the current version only, plus a diff |
+| The same symbol in several files | Broad grep output pasted whole | Paste the matching lines, not the files |
+| Repeated paths in a listing | `find` or `tree` output left unfiltered | List only the paths in play |
+| The task restated three ways | Accumulated turns of clarification | Restate once, in final form |
+| A test and its copied-out failure | Pasting both the test and the runner output | Keep the failure output, cite the test path |
 
-Prefer, because the operation is restated in its own terms:
-  Build the list of files under internal/ whose paths do not end in _test.go.
-  Print that list. Delete only the files on it.
+The practice that follows is to pass the assembled context through a duplication check
+before sending it, in the same spirit as the existence check in the second note.
+
+```bash
+# Identifiers appearing in more than one distinct block of the assembled context.
+awk '/^--- /{blk=$0} /[A-Za-z_][A-Za-z0-9_]{4,}/{
+       for (i=1;i<=NF;i++) if ($i ~ /^[A-Za-z_][A-Za-z0-9_]{4,}$/) seen[$i","blk]=1
+     }
+     END{ for (k in seen){ split(k,a,","); c[a[1]]++ }
+          for (s in c) if (c[s]>2) print c[s], s }' context.txt | sort -rn | head -20
 ```
 
-Thirdly, prompt-ingredient attribution should require controlled repeats rather than
-single observations. Because redundant internal pathways mean that a prompt can succeed for
-reasons unrelated to the cue a practitioner credits, and that removing an apparently
-load-bearing instruction may cost far less than expected (Wang et al., 2023; McGrath et al.,
-2023), the common practice of adding a line, observing an improvement and retaining the
-line indefinitely is unsound by construction. It can then be said that the discipline the self-repair result implies is
-evaluative rather than compositional: the useful artefact is a held-out set of tasks, not a
-longer prompt.
+It must be noted that this is a second-order extrapolation with no direct empirical support
+at any scale, and that Nainani et al. (2024) find the circuit adapts to changed repetition
+structure rather than simply failing. Accordingly, deduplication is offered as the most
+testable of the hypotheses here, and as a practice that costs nothing even if the mechanism
+turns out not to transfer.
 
-Lastly, mechanistic findings should be treated as generators of hypotheses to test on a
-practitioner's own workload rather than as settled engineering constraints, which follows
-directly from the fragility of the discovery methods (Conmy et al., 2023).
+### The phrasing of an inverted instruction
+
+Hanna, Liu and Variengien (2023) establish that a familiar surface form was sufficient to
+recruit a familiar computation on a prompt whose words inverted the relation. The practice
+this suggests is to restate an unusual operation in its own terms rather than as a minimal
+negation of the common one, and the rewrites below follow the same pattern in each case:
+name the set, then act on it.
+
+```text
+Weak                                   Stronger
+-----------------------------------    -----------------------------------------------
+Delete the files that do NOT match     List the files under internal/ whose paths do not
+internal/**/*_test.go                  end in _test.go. Print that list. Delete only the
+                                       files on it.
+
+Roll back to the earlier version       Check out parse.go at commit a1b2c3d into the
+                                       working tree. Do not revert any other file.
+
+Do not add any new dependencies        Before editing, record the contents of go.mod.
+                                       After editing, assert that go.mod is byte-identical.
+
+Skip the tests that are already        Run the full suite once. Collect the names that
+passing                                failed. Re-run only those names.
+```
+
+Each stronger form has two properties: the operation is expressed positively, over an
+explicitly constructed set, and the check is mechanical rather than a matter of the agent
+remembering a prohibition. Consequently, the instruction no longer depends on the model
+resisting the pull of the more common template.
+
+### An evaluation loop for a prompt change
+
+The self-repair result is the reason prompt-ingredient attribution requires controlled
+repeats rather than single observations. Because redundant internal pathways mean a prompt
+can succeed for reasons unrelated to the cue a practitioner credits, and that removing an
+apparently load-bearing instruction may cost far less than expected (Wang et al., 2023;
+McGrath et al., 2023), the widespread practice of adding a line, observing an improvement
+and retaining the line indefinitely is unsound by construction.
+
+<figure>
+<svg class="dg" viewBox="0 0 620 236" role="img" aria-labelledby="ttl-loop">
+<title id="ttl-loop">An evaluation loop for a change to a prompt</title>
+<rect class="box" x="20" y="52" width="112" height="46"/>
+<text class="t" x="76" y="72" text-anchor="middle">held-out</text>
+<text class="t" x="76" y="87" text-anchor="middle">task set</text>
+<path class="line" d="M 138 75 L 158 75"/><polygon class="arrow" points="164,75 154,71 154,79"/>
+<rect class="fill" x="164" y="52" width="112" height="46"/>
+<text class="t" x="220" y="72" text-anchor="middle">baseline,</text>
+<text class="t" x="220" y="87" text-anchor="middle">k runs</text>
+<path class="line" d="M 282 75 L 302 75"/><polygon class="arrow" points="308,75 298,71 298,79"/>
+<rect class="fill" x="308" y="52" width="112" height="46"/>
+<text class="t" x="364" y="72" text-anchor="middle">with the</text>
+<text class="t" x="364" y="87" text-anchor="middle">change, k runs</text>
+<path class="line" d="M 426 75 L 446 75"/><polygon class="arrow" points="452,75 442,71 442,79"/>
+<rect class="box" x="452" y="46" width="148" height="58"/>
+<text class="t" x="526" y="68" text-anchor="middle">is the gap larger</text>
+<text class="t" x="526" y="83" text-anchor="middle">than the spread</text>
+<text class="t" x="526" y="98" text-anchor="middle">across the k runs?</text>
+<path class="line" d="M 500 108 L 500 138"/><polygon class="arrow" points="500,144 496,133 504,133"/>
+<rect class="hot" x="440" y="144" width="72" height="32"/>
+<text class="tr" x="476" y="164" text-anchor="middle">keep</text>
+<path class="line" d="M 560 108 L 560 138"/><polygon class="arrow" points="560,144 556,133 564,133"/>
+<rect class="box" x="528" y="144" width="72" height="32"/>
+<text class="t" x="564" y="164" text-anchor="middle">drop</text>
+<text class="tf" x="492" y="132" text-anchor="end">yes</text>
+<text class="tf" x="570" y="132">no</text>
+<text class="tm" x="20" y="212">A single run cannot distinguish a change that helped from one the model</text>
+<text class="tm" x="20" y="226">compensated for; the spread across k runs is the only available yardstick.</text>
+</svg>
+<figcaption><span class="label">Figure 5</span> The loop the self-repair result argues for.
+The comparison that matters is between the size of the change and the run-to-run spread of
+the baseline, not between one run before and one run after. The figure encodes the
+recommended procedure and is not drawn from any cited experiment.</figcaption>
+</figure>
+
+In practice this means three things. Firstly, a held-out set of representative tasks is the
+artefact worth building, and it is worth more than any individual prompt line. Secondly,
+`k` should be large enough that the run-to-run spread is visible, since a change smaller
+than that spread is indistinguishable from noise. Thirdly, and least often done, the line
+should periodically be removed again: a prompt accumulates instructions that were never
+load-bearing, and only ablation reveals them.
+
+```text
+Prompt change protocol
+
+  1. Fix a set of 15-30 tasks that resemble the real workload. Do not tune on them.
+  2. Record baseline pass rate over k >= 5 runs. Record the spread, not only the mean.
+  3. Make exactly one change.
+  4. Re-run k times. Compare the difference against the baseline spread.
+  5. If kept, add a dated line to the changelog stating what was measured.
+  6. Every few months, remove each line in turn and re-measure. Delete what does not pay.
+```
+
+### A changelog for an instruction file
+
+The final practice follows from the fragility of the discovery methods rather than from any
+single result. Since a mechanistic finding is a generator of hypotheses rather than a
+settled constraint (Conmy et al., 2023), the reason a line exists should be recorded next to
+it, so that a later reader can tell a measured effect from an inherited superstition.
+
+```markdown
+<!-- CHANGELOG
+2026-03-04  Added the table-driven test example.
+            +18pts on the 22-task set over 5 runs; baseline spread 6pts. Kept.
+2026-03-19  Added "think carefully before editing".
+            +2pts, baseline spread 7pts. Not distinguishable from noise. Removed.
+2026-04-02  Moved acceptance criteria from the middle to the top of the file.
+            +9pts, spread 6pts. Kept, consistent with the positional evidence.
+-->
+```
+
+An instruction file maintained this way tends to shrink rather than grow, which is the
+opposite of the usual trajectory and is the clearest practical consequence of taking the
+self-repair result seriously.
 
 ## What this review could not establish
 
@@ -363,7 +478,9 @@ components are redundant and self-repairing, so that ablation-based attribution
 systematically understates the mechanisms available to a model, and that the widely quoted
 five per cent figure is specific to its task and ablation method. Following this, it was
 shown that circuit discovery is fragile by its own practitioners' account, which bounds
-every recommendation resting on it. Finally, four recommendations were derived, and the
+every recommendation resting on it. Finally, four practices were set out — deduplicating the
+context, restating inverted instructions positively over an explicit set, measuring a prompt
+change against the run-to-run spread, and recording why each line survives — and the
 considerable territory this review could not establish was stated in full.
 
 A common thread running through all three notes — [the first](/blog/induction-heads-function-vectors-and-demonstrations/) on induction heads and

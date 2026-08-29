@@ -1,6 +1,6 @@
 ---
-title: "Position, Retrieval Heads and the Ordering of a Long Context"
-description: "Where information sits in a context materially changes whether a model uses it, and the copying of context into output runs through a sparse, fragile set of heads whose failure mode is fabrication. Second of three."
+title: "Agentic Coding x Mechanistic Interpretability pt. 2: Ordering the Context"
+description: "A budget for the context window, what to cut first, which identifiers to supply verbatim, and a mechanical check for the fabricated paths a long context reliably produces."
 pubDate: 2026-08-29
 tags: ["mechanistic interpretability", "prompting", "agents"]
 ---
@@ -14,9 +14,11 @@ design that holds the content constant. Next, it will be argued that this is not
 by using a model trained or marketed for long contexts, and that the effect persists in
 current models under harder evaluations. It will then be argued that the copying of
 context into output is carried by a sparse and universal set of retrieval heads whose
-removal is causally established to produce hallucination rather than abstention. Lastly, a
-context ordering that respects these findings will be set out, together with an account of
-the parts of an agent's behaviour the evidence does not reach. It should be noted that the
+removal is causally established to produce hallucination rather than abstention. Lastly, a budget for the context window will be set out,
+together with the order in which material should be cut, the identifiers that must be
+supplied verbatim, the practice of re-anchoring an instruction at the end of a long turn,
+and a mechanical check for the fabricated identifiers this mechanism produces when it
+fails. It should be noted that the
 positional finding is behavioural rather than mechanistic, that the attention-level
 account of it comes from a different paper than the accuracy-level one, and that the two
 are cited separately below for that reason.
@@ -1203,12 +1205,12 @@ intermediate results forward. Therefore, a long agent trajectory does not merely
 context; it leans more heavily on the component whose documented failure mode is
 fabrication (Wu et al., 2025).
 
-## An ordering that respects the findings
+## The ordering of an agent context
 
-The recommendations below are extrapolations. Every model in the cited work is an
-open-weight decoder-only model of the 2023 to 2024 generation, or a proprietary model of
-that period, and the tasks are templated retrieval tasks rather than repository edits
-performed over many turns with tools.
+Everything below is an extrapolation. Every model in the cited work is an open-weight
+decoder-only model of the 2023 to 2024 generation, or a proprietary model of that period,
+and the tasks are templated retrieval tasks rather than repository edits performed over
+many turns with tools (Liu et al., 2024; Wu et al., 2025).
 
 <figure>
 <svg class="dg" viewBox="0 0 620 330" role="img" aria-labelledby="ttl-lay">
@@ -1246,33 +1248,127 @@ rather than a measurement, and it should be read as one defensible arrangement r
 an optimum, since no cited study compared prompt layouts on an agentic coding task.</figcaption>
 </figure>
 
-Firstly, the task statement and the constraints that must not be violated should be placed
-at the very beginning and the operative instruction repeated at the very end, because those
-are the two regions where retrievability is highest in the models tested (Liu et al., 2024). Secondly,
-retrieved material should be kept short rather than complete, because the middle of a long
-context is where degradation is documented (Liu et al., 2024; Modarressi et al., 2025), and
-because the marginal file added there adds only to the region least likely to be used.
+### A budget for the context window
 
-Thirdly, identifiers the agent must reproduce should be supplied verbatim rather than
-described, because the mechanism established by Wu et al. (2025) is a literal-copy
-mechanism and Modarressi et al. (2025) attribute much long-context failure to the absence
-of literal lexical overlap.
+The finding that an extended window does not change the positional profile (Liu et al.,
+2024) converts the context window from a capacity to be filled into a budget to be spent.
+The following allocation is a defensible default for a long-horizon coding task.
+
+| Region | Contents | Discipline |
+| --- | --- | --- |
+| Opening | Role, hard constraints, acceptance criteria | Never elided, never summarised |
+| Early | One worked example of the change wanted | A single example, per the first note |
+| Middle | Retrieved files, diffs, logs, schemas | Cut first, cut hardest |
+| Late | The concrete task, restated | Written in the words the agent should use |
+| Closing | Required output form, verbatim identifiers | Repeated even if stated at the top |
+
+The asymmetry is the point. Material in the opening and closing regions earns its tokens;
+material in the middle is competing for the region where Liu et al. (2024) measure the
+lowest retrieval, so the marginal file added there is the least likely to be used and the
+most likely to displace attention from something that would have been.
+
+### The material to cut first
+
+Because the degradation is positional rather than semantic, the decision of what to remove
+cannot be made by relevance alone. The following order has served, from first cut to last.
+
+1. Whole files where a single function was needed.
+2. Vendored or generated code, including lockfiles and protobuf output.
+3. Test files not being changed, where the convention is already stated as a constraint.
+4. Directory listings beyond the paths actually in play.
+5. Prior turns of the conversation whose conclusions have already been written down.
+6. Documentation that restates what the code shows.
+
+An agent that reads a file itself, on demand, spends the tokens only when the file is
+needed and places them at the end of the context rather than in the middle, which is the
+better position on both counts. Consequently, a tool call is frequently preferable to a
+paste, and the common instinct to front-load the context with everything that might be
+relevant is close to the worst available arrangement.
+
+### The verbatim block
+
+Wu et al. (2025) establish that copying from context is carried by heads identified by a
+literal copy-paste criterion, and Modarressi et al. (2025) attribute much long-context
+failure to the absence of literal lexical overlap between the query and the target.
+Therefore, anything the agent must reproduce exactly should appear in the context exactly,
+rather than being described.
 
 ```text
-Edit exactly this file:            internal/config/parse.go
-The function to change:            func ParseTimeout(raw string) (time.Duration, error)
-The error string to preserve:      "config: timeout must be a positive duration"
-The test that must pass:           go test ./internal/config -run TestParseTimeout
+Paths, symbols and strings — reproduce these exactly, do not retype from memory:
 
-Do not rename the function, and do not alter the error string.
+  file        internal/config/parse.go
+  function    func ParseTimeout(raw string) (time.Duration, error)
+  error       "config: timeout must be a positive duration"
+  test        go test ./internal/config -run TestParseTimeout
+  do not touch internal/config/parse_test.go
 ```
 
-Lastly, fabricated identifiers should be expected and checked for rather than assumed
-away, because the documented failure mode of the retrieval mechanism is hallucination
-rather than abstention. In practice this argues for an acceptance step that verifies every
-path, symbol and signature the agent emits against the repository, since a plausible but
-non-existent identifier is exactly what the mechanism produces when it fails (Wu et al.,
-2025).
+The table below is the operative distinction.
+
+| Supply verbatim | Safe to describe |
+| --- | --- |
+| File paths and package names | The intent of the change |
+| Full function signatures | Why the change is wanted |
+| Exact error and log strings | The acceptance criteria |
+| Environment variable names | Background on the subsystem |
+| The exact command to run | Style preferences already in the instruction file |
+
+### Re-anchoring at the end of a long turn
+
+Because recency is the more robust half of the positional finding (Liu et al., 2024), the
+operative instruction should be the last thing in the context rather than the first, and
+should be restated rather than referred back to. In an agent loop this means restating the
+task after a long tool result, not merely at the start of the session.
+
+```text
+[... 40k tokens of file contents and test output ...]
+
+Restating the task, which has not changed:
+  Make TestParseTimeout pass without altering the error string.
+  Do not modify parse_test.go. Report the diff and the test output.
+```
+
+The same reasoning applies to context compaction and to subagents. A summary that
+preserves the substance of the middle while dropping the opening constraints and the
+closing restatement has discarded the two regions the evidence says are most used, and a
+subagent launched with only the middle inherits a context with no anchor at either end.
+
+### A verification step for fabricated identifiers
+
+The documented failure mode of the retrieval mechanism is hallucination rather than
+abstention (Wu et al., 2025), and a fabricated identifier is plausible by construction.
+Accordingly, the check that matters is mechanical rather than editorial: every path,
+symbol and command an agent emits should be confirmed to exist before the output is
+trusted.
+
+```bash
+# Every path the agent mentioned must exist in the repository.
+grep -oE '[a-zA-Z0-9_./-]+\.(go|ts|py|md)' agent-output.txt | sort -u |
+  while read -r f; do [ -e "$f" ] || echo "MISSING PATH: $f"; done
+
+# Every symbol it claimed to call must be defined somewhere.
+grep -oE '\b[A-Z][A-Za-z0-9]+\(' agent-output.txt | tr -d '(' | sort -u |
+  while read -r s; do
+    rg -q "func \($s\b|func $s\b" . || echo "UNDEFINED SYMBOL: $s"
+  done
+```
+
+Two properties make this worth automating rather than eyeballing. The failure is silent,
+since a fabricated path is syntactically indistinguishable from a real one; and it becomes
+more likely precisely as the context grows, which is the regime in which an operator is
+least inclined to read carefully.
+
+### A checklist for a long context
+
+1. The hard constraints appear in the first two hundred tokens.
+2. The operative task is restated in the last two hundred tokens.
+3. Every identifier the agent must reproduce appears verbatim somewhere in the context.
+4. Nothing in the middle region is there because it might be useful.
+5. A tool call has been preferred to a paste wherever the agent can fetch the file itself.
+6. Compaction and subagent prompts preserve the opening and closing regions, not only the
+   middle.
+7. The output is passed through an existence check for paths and symbols before it is
+   reviewed on its merits.
 
 ## Conclusion
 
@@ -1284,8 +1380,9 @@ superimposed, and that the degradation persists in current models under harder
 evaluations. It was then argued that the copying of context into output is carried by a
 sparse, universal and causally established set of retrieval heads, that pruning them
 produces fabrication while pruning as many random heads does not, and that chain-of-thought
-prompting depends on this same machinery. Finally, four recommendations were derived and
-marked as extrapolations. A common thread running through these findings is that the
+prompting depends on this same machinery. Finally, a context budget was set out,
+together with a cutting order, a verbatim block, the practice of restating the task last,
+and an existence check to run over an agent's output, all of it marked as extrapolation. A common thread running through these findings is that the
 constraint is not how much context a model can be given but which parts of it the model can
 still reach, and that the two have been conflated in practice. As a next step, the
 distinction between literal copying and context-grounded synthesis deserves attention from
