@@ -3,6 +3,9 @@ title: "Agentic Coding x Mechanistic Interpretability pt. 1: Writing Demonstrati
 description: "How to write the example block in a CLAUDE.md or AGENTS.md file, and what to state as a constraint instead, derived from what is actually known about how models use in-context examples."
 pubDate: 2026-08-29
 tags: ["mechanistic interpretability", "prompting", "agents"]
+series:
+  name: "Agentic Coding x Mechanistic Interpretability"
+  part: 1
 ---
 
 The following discussion maintains that the mechanistic interpretability literature

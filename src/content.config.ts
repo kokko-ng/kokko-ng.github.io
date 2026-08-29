@@ -11,6 +11,17 @@ const blog = defineCollection({
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),
+    /**
+     * Set on every post that belongs to a run of related notes. The index
+     * groups by `name` and orders by `part`; a post without this field is
+     * listed as a standalone note. Adding a new series needs no code change.
+     */
+    series: z
+      .object({
+        name: z.string(),
+        part: z.number().int().positive(),
+      })
+      .optional(),
     /** Drafts build locally but are excluded from the index, feed and sitemap. */
     draft: z.boolean().default(false),
   }),

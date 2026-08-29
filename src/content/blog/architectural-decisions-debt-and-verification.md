@@ -3,6 +3,9 @@ title: "Agentic Coding x Software Architecture pt. 3: Decisions and Verification
 description: "What to write down for an agent to read, why architectural decisions rather than code smells are where the cost sits, and why a passing test suite is weaker evidence of a correct patch than it appears."
 pubDate: 2026-08-29
 tags: ["software architecture", "prompting", "agents"]
+series:
+  name: "Agentic Coding x Software Architecture"
+  part: 3
 ---
 
 The following discussion maintains that the information an agent most needs about a codebase

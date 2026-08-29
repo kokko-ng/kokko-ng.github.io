@@ -3,6 +3,9 @@ title: "Agentic Coding x Mechanistic Interpretability pt. 3: Wording and Evaluat
 description: "Deduplicating an agent context, rewriting inverted instructions so they do not read like the case they invert, and an evaluation loop that tells a prompt line that works from one that is merely being carried."
 pubDate: 2026-08-29
 tags: ["mechanistic interpretability", "prompting", "agents"]
+series:
+  name: "Agentic Coding x Mechanistic Interpretability"
+  part: 3
 ---
 
 The following discussion maintains that the surface form of a prompt is a causal input to

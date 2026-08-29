@@ -3,6 +3,9 @@ title: "Agentic Coding x Mechanistic Interpretability pt. 2: Ordering the Contex
 description: "A budget for the context window, what to cut first, which identifiers to supply verbatim, and a mechanical check for the fabricated paths a long context reliably produces."
 pubDate: 2026-08-29
 tags: ["mechanistic interpretability", "prompting", "agents"]
+series:
+  name: "Agentic Coding x Mechanistic Interpretability"
+  part: 2
 ---
 
 The following discussion maintains that the position of information within a long context

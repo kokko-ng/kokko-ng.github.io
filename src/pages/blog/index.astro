@@ -1,9 +1,10 @@
 ---
 import Base from "../../layouts/Base.astro";
-import { getPosts, formatDate, isoDate } from "../../lib/posts";
+import { getPosts, groupPosts, partTitle, formatDate, isoDate } from "../../lib/posts";
 import { site } from "../../data/site";
 
 const posts = await getPosts();
+const groups = groupPosts(posts);
 const count = String(posts.length).padStart(2, "0");
 ---
 
@@ -16,22 +17,40 @@ const count = String(posts.length).padStart(2, "0");
       posts.length === 0 ? (
         <p class="lede" style="margin: 0">No notes have been published yet.</p>
       ) : (
-        <div class="posts">
-          {posts.map((post) => (
-            <article class="post-item">
-              <div class="post-item__head">
-                <h2 class="post-item__title">
-                  <a href={`/blog/${post.id}/`}>{post.data.title}</a>
-                  {post.data.draft && <span class="draft-flag">Draft</span>}
-                </h2>
-                <time class="label" datetime={isoDate(post.data.pubDate)}>
-                  {formatDate(post.data.pubDate)}
-                </time>
-              </div>
-              <p class="post-item__blurb">{post.data.description}</p>
-            </article>
-          ))}
-        </div>
+        groups.map((group) => (
+          <section class="group">
+            <div class="group__head">
+              <h2 class="group__name">{group.name}</h2>
+              <p class="group__count">
+                {group.kind === "series"
+                  ? `${group.posts.length} part${group.posts.length === 1 ? "" : "s"}`
+                  : `${group.posts.length} note${group.posts.length === 1 ? "" : "s"}`}
+              </p>
+            </div>
+
+            <div class="posts">
+              {group.posts.map((post) => (
+                <article class:list={["post-item", group.kind === "series" && "post-item--part"]}>
+                  {group.kind === "series" && (
+                    <p class="post-item__part">pt. {post.data.series?.part}</p>
+                  )}
+                  <div class="post-item__body">
+                    <div class="post-item__head">
+                      <h3 class="post-item__title">
+                        <a href={`/blog/${post.id}/`}>{partTitle(post)}</a>
+                        {post.data.draft && <span class="draft-flag">Draft</span>}
+                      </h3>
+                      <time class="label" datetime={isoDate(post.data.pubDate)}>
+                        {formatDate(post.data.pubDate)}
+                      </time>
+                    </div>
+                    <p class="post-item__blurb">{post.data.description}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        ))
       )
     }
   </div>

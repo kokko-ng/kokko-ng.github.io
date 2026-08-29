@@ -3,6 +3,9 @@ title: "Agentic Coding x Software Architecture pt. 2: Assembling the Context"
 description: "Which files to hand a coding agent and in what order, drawn from the measured failure rates of repository retrieval and from what version history reveals that static analysis cannot."
 pubDate: 2026-08-29
 tags: ["software architecture", "prompting", "agents"]
+series:
+  name: "Agentic Coding x Software Architecture"
+  part: 2
 ---
 
 The following discussion maintains that the file-selection step, rather than the generation

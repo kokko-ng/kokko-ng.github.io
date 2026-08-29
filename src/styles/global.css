@@ -15,8 +15,11 @@
 
   --rail: 264px;
   --gutter: 72px;
-  --measure: 38em;
-  --prose: 33em;
+  /* Measures are in rem, not em: an em resolves against each element's own
+     font-size, which would give the caption, the standfirst and every heading a
+     different column width from the body text. */
+  --measure: 38rem;
+  --prose: 33rem;
 
   --sans: "Inter Tight Variable", "Inter Tight", system-ui, -apple-system, sans-serif;
   --mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -306,11 +309,11 @@ a { color: inherit; }
   flex-wrap: wrap;
 }
 .post-item__title {
-  font-size: 21px;
+  font-size: 17px;
   font-weight: 600;
   margin: 0;
-  letter-spacing: -0.022em;
-  line-height: 1.26;
+  letter-spacing: -0.018em;
+  line-height: 1.3;
 }
 .post-item__title a { text-decoration: none; }
 .post-item__title a:hover { text-decoration: underline; text-underline-offset: 3px; }
@@ -320,6 +323,58 @@ a { color: inherit; }
   color: var(--mid);
   margin: 7px 0 0;
   max-width: 36em;
+}
+
+/* --- grouped index -------------------------------------------------------
+   The blog index is grouped: one group per series, plus one for the notes that
+   stand alone. A group is marked by its name over a solid rule, with the row
+   hairlines beneath it, so the sections separate without a card or a colour.
+   ------------------------------------------------------------------------- */
+
+.group { margin-top: 44px; }
+.group:first-of-type { margin-top: 0; }
+
+.group__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  padding-bottom: 11px;
+}
+.group__name {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  line-height: 1.25;
+  margin: 0;
+}
+.group__count {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--faint);
+  margin: 0;
+  white-space: nowrap;
+}
+/* The group rule is drawn in ink; the rules between its rows stay hairlines. */
+.group .posts { border-top: 1px solid var(--ink); }
+
+/* A part carries its number in a monospace gutter, which is the same metadata
+   layer the dates and labels use. The gutter folds away on a narrow screen. */
+.post-item--part {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 0 14px;
+}
+.post-item__part {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--faint);
+  margin: 0;
+  padding-top: 5px;
+}
+@media (max-width: 560px) {
+  .post-item--part { grid-template-columns: 1fr; gap: 0; }
+  .post-item__part { padding-top: 0; margin-bottom: 5px; }
 }
 
 .draft-flag {
@@ -533,8 +588,8 @@ a { color: inherit; }
    ------------------------------------------------------------------------- */
 
 :root {
-  --note: 15em;
-  --notegap: 3em;
+  --note: 15rem;
+  --notegap: 3rem;
   --wide: calc(var(--prose) + var(--notegap) + var(--note));
 }
 
@@ -546,11 +601,10 @@ a { color: inherit; }
   .article__stand,
   .article__bar { max-width: var(--prose); }
   .prose { max-width: var(--wide); }
-  /* A heading or block element never sits beside a floated note. */
-  .prose h2,
-  .prose > figure,
-  .prose > .tenet,
-  .prose > pre { clear: right; }
+  /* Only the figure is wide enough to reach the note column, so only the figure
+     has to clear a note. Clearing the 33em elements as well would drop them
+     below a tall note and open a column of white space beside it. */
+  .prose > figure { clear: right; }
   .prose > aside.note {
     float: right;
     clear: right;

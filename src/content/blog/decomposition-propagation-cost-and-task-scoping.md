@@ -3,6 +3,9 @@ title: "Agentic Coding x Software Architecture pt. 1: Scoping the Task"
 description: "How to decide what a single agent task should cover, drawn from what the software-architecture literature established about modular decomposition, change propagation, and the design metrics that fail to predict maintenance effort."
 pubDate: 2026-08-29
 tags: ["software architecture", "prompting", "agents"]
+series:
+  name: "Agentic Coding x Software Architecture"
+  part: 1
 ---
 
 The following discussion maintains that the software-architecture literature supports a
