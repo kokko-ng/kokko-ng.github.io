@@ -363,7 +363,20 @@ a { color: inherit; }
 
 .prose { font-size: 16px; }
 .prose > * { max-width: var(--prose); }
-.prose p { margin: 14px 0 0; }
+
+/* Body copy is justified. At a 33em measure justification needs hyphenation,
+   otherwise the extra space collects into rivers. */
+.prose p {
+  margin: 14px 0 0;
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  text-wrap: pretty;
+}
+/* Anything that is data rather than prose stays ragged-right. */
+.prose figcaption,
+.prose > aside.note p,
+.prose > .tenet p { text-align: left; hyphens: manual; }
 .prose h2 {
   font-size: 19px;
   font-weight: 600;
@@ -511,6 +524,147 @@ a { color: inherit; }
 }
 .pager__next { text-align: right; }
 
+/* --- figures, margin notes and references --------------------------------
+   Long-form technical notes need room the 33em measure does not give. A figure
+   breaks out to the full column; a margin note sits beside the prose on wide
+   screens and folds back into the flow on narrow ones. Diagrams are monochrome
+   and inherit the theme through the classes below, so nothing in an SVG hard-codes
+   a colour.
+   ------------------------------------------------------------------------- */
+
+:root {
+  --note: 15em;
+  --notegap: 3em;
+  --wide: calc(var(--prose) + var(--notegap) + var(--note));
+}
+
+@media (min-width: 1200px) {
+  /* The article widens so figures and notes have room; the title, standfirst
+     and body text stay at the reading measure. */
+  .article { max-width: var(--wide); }
+  .article__title,
+  .article__stand,
+  .article__bar { max-width: var(--prose); }
+  .prose { max-width: var(--wide); }
+  /* A heading or block element never sits beside a floated note. */
+  .prose h2,
+  .prose > figure,
+  .prose > .tenet,
+  .prose > pre { clear: right; }
+  .prose > aside.note {
+    float: right;
+    clear: right;
+    width: var(--note);
+    margin: 7px 0 14px var(--notegap);
+    max-width: var(--note);
+  }
+}
+
+.prose > figure {
+  max-width: var(--wide);
+  margin: 30px 0 0;
+}
+
+/* The widest diagrams scroll inside themselves rather than shrinking to
+   illegibility on a phone. */
+.prose > figure.scroll {
+  overflow-x: auto;
+}
+.prose > figure.scroll svg { min-width: 620px; }
+
+.prose figure svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.prose figcaption {
+  margin: 13px 0 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--mid);
+  max-width: var(--prose);
+}
+.prose figcaption .label {
+  display: inline;
+  margin-right: 9px;
+}
+
+/* Margin notes: an aside on wide screens, an indented block on narrow ones. */
+.prose > aside.note {
+  margin: 16px 0 0;
+  padding-left: 18px;
+  border-left: 1px solid var(--hair);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--mid);
+  max-width: var(--prose);
+}
+@media (min-width: 1200px) {
+  .prose > aside.note {
+    padding-left: 14px;
+  }
+}
+.prose > aside.note p { margin: 0; font-size: inherit; }
+.prose > aside.note p + p { margin-top: 9px; }
+
+/* A boxed statement of what a result does and does not license. */
+.prose > .tenet {
+  margin: 26px 0 0;
+  padding: 17px 19px;
+  background: var(--tint);
+  max-width: var(--prose);
+}
+.prose > .tenet p { margin: 8px 0 0; font-size: 15px; }
+.prose > .tenet p:first-of-type { margin-top: 0; }
+.prose > .tenet .label { margin-bottom: 10px; }
+
+/* References: alphabetical, hanging indent, no counters. */
+.prose > ol.refs {
+  max-width: var(--prose);
+  margin: 16px 0 0;
+  counter-reset: none;
+}
+.prose > ol.refs li {
+  counter-increment: none;
+  padding-left: 24px;
+  text-indent: -24px;
+  margin-top: 11px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--mid);
+}
+.prose > ol.refs li::before { content: none; }
+.prose > ol.refs li a { color: var(--ink); }
+
+/* --- diagram vocabulary ---------------------------------------------------
+   Every diagram is drawn from these six classes only. Emphasis is carried by
+   ink-filled shapes with reversed text, never by colour.
+   ------------------------------------------------------------------------- */
+
+.dg { font-family: var(--mono); }
+.dg text { font-size: 10.5px; letter-spacing: 0.01em; }
+
+.dg .box { fill: var(--paper); stroke: var(--hair); stroke-width: 1; }
+.dg .fill { fill: var(--tint); stroke: var(--hair); stroke-width: 1; }
+.dg .hot { fill: var(--ink); stroke: none; }
+.dg .line { fill: none; stroke: var(--faint); stroke-width: 1; }
+.dg .rule { fill: none; stroke: var(--hair); stroke-width: 1; }
+.dg .dash { fill: none; stroke: var(--faint); stroke-width: 1; stroke-dasharray: 3 3; }
+
+.dg .t { fill: var(--ink); }
+.dg .tm { fill: var(--mid); }
+.dg .tf {
+  fill: var(--faint);
+  font-size: 9px;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+.dg .tr { fill: var(--paper); }
+.dg .arrow { fill: var(--faint); stroke: none; }
+.dg .plot { fill: none; stroke: var(--ink); stroke-width: 1.5; }
+.dg .band { fill: var(--tint); stroke: none; }
+
 /* --- narrow -------------------------------------------------------------- */
 
 @media (max-width: 900px) {
@@ -551,6 +705,7 @@ a { color: inherit; }
 
   .statement { font-size: 28px; }
   .article__title { font-size: 27px; }
+  .prose > figure { margin-top: 24px; }
   .kv { grid-template-columns: 1fr; gap: 2px; }
   .kv dt { padding-top: 12px; }
   .kv dt:first-child { padding-top: 0; }
