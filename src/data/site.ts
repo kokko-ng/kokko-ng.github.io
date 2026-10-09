@@ -8,9 +8,9 @@ export const site = {
   positioning:
     "I build systems from first principles to understand how they actually work.",
   intro:
-    "I work on cloud engineering and agentic developer workflows at Insight Enterprises in Singapore. Outside that I build things from their smallest working parts \u2014 data structures, an 8-bit computer, developer tooling \u2014 because implementing a system is the only way I reliably understand it. The projects here set out how each one was built; the notes set out what I read to get there.",
+    "I work on cloud engineering and agentic developer workflows at Insight Enterprises in Singapore. Outside that I build things from their smallest working parts \u2014 an 8-bit computer, developer tooling \u2014 because implementing a system is the only way I reliably understand it. The projects here set out how each one was built.",
   description:
-    "Projects and notes by Kokko Ng, an engineer in Singapore, on data structures, computer architecture, and agentic developer tooling.",
+    "Projects by Kokko Ng, an engineer in Singapore, on computer architecture and agentic developer tooling.",
   quote: "If you run, you gain one. If you move forward, you gain two.",
   /** Shown in the rail. Add or remove entries freely; order is preserved. */
   links: [
@@ -27,13 +27,10 @@ export const site = {
   intros: {
     projects:
       "Each of these exists to understand a system by implementing it rather than configuring it. Every entry carries a note on why it was worth building.",
-    blog:
-      "These are AI-generated research notes, written to teach myself a subject properly rather than leave it as a half-read pile of papers. Each claim is traced to a primary source and the gaps are stated outright. Published in case they are useful to someone else.",
   },
 } as const;
 
 export const nav = [
   { label: "Home", href: "/" },
   { label: "Projects", href: "/projects/" },
-  { label: "Blog", href: "/blog/" },
 ] as const;

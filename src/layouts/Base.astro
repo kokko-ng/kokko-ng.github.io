@@ -8,11 +8,9 @@ import { site } from "../data/site";
 interface Props {
   title?: string;
   description?: string;
-  /** Omit for regular pages; set to "article" on blog posts. */
-  ogType?: "website" | "article";
 }
 
-const { title, description = site.description, ogType = "website" } = Astro.props;
+const { title, description = site.description } = Astro.props;
 const pageTitle = title ? `${title} — ${site.title}` : site.title;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url);
 ---
@@ -26,10 +24,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url);
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="alternate" type="application/rss+xml" title={site.title} href="/rss.xml" />
     <meta name="generator" content={Astro.generator} />
 
-    <meta property="og:type" content={ogType} />
+    <meta property="og:type" content="website" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />

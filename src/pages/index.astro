@@ -1,9 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
 import { site } from "../data/site";
-import { getPosts, formatDate, isoDate } from "../lib/posts";
-
-const recent = (await getPosts()).slice(0, 4);
 ---
 
 <Base>
@@ -21,24 +18,6 @@ const recent = (await getPosts()).slice(0, 4);
             </>
           ))}
         </dl>
-      )
-    }
-
-    {
-      recent.length > 0 && (
-        <>
-          <p class="label" style="margin: 52px 0 16px">Recent writing</p>
-          <div class="rows">
-            {recent.map((post) => (
-              <a class="row" href={`/blog/${post.id}/`}>
-                <span class="row__title">{post.data.title}</span>
-                <time class="row__date" datetime={isoDate(post.data.pubDate)}>
-                  {formatDate(post.data.pubDate)}
-                </time>
-              </a>
-            ))}
-          </div>
-        </>
       )
     }
   </div>
