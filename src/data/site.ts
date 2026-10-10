@@ -27,10 +27,13 @@ export const site = {
   intros: {
     projects:
       "Each of these exists to understand a system by implementing it rather than configuring it. Every entry carries a note on why it was worth building.",
+    study:
+      "What I intend to study next, and what I intend to write about once I have. Entries come off the list as they are finished.",
   },
 } as const;
 
 export const nav = [
   { label: "Home", href: "/" },
   { label: "Projects", href: "/projects/" },
+  { label: "Study", href: "/study/" },
 ] as const;

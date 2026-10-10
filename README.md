@@ -16,6 +16,7 @@ npm run dev      # http://localhost:4321
 | --- | --- |
 | Name, tagline, intro copy, links | `src/data/site.ts` |
 | Featured projects | `src/data/projects.ts` |
+| Study list and post ideas | `src/data/study.ts` |
 | Design tokens and all styling | `src/styles/global.css` |
 
 ## Checks

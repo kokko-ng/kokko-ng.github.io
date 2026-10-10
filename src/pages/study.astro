@@ -1,0 +1,48 @@
+---
+import Base from "../layouts/Base.astro";
+import { study, writing, type Topic } from "../data/study";
+import { site } from "../data/site";
+
+const sections: { label: string; topics: Topic[] }[] = [
+  { label: "To study", topics: study },
+  { label: "To write", topics: writing },
+];
+
+const pad = (n: number) => String(n).padStart(2, "0");
+---
+
+<Base title="Study" description="What Kokko Ng intends to study next, and what to write about once it is done.">
+  <div class="stream">
+    <p class="label" style="margin-bottom: 14px">Study</p>
+    <p class="lede" style="margin: 0">{site.intros.study}</p>
+
+    {
+      sections.map((section) => (
+        <section class="topics">
+          <h2 class="label topics__label">
+            {section.label} &mdash; {pad(section.topics.length)}
+          </h2>
+          <ul class="entries topics__list">
+            {section.topics.map((topic) => (
+              <li class="entry">
+                <div class="entry__head">
+                  <h3 class="entry__name">
+                    {topic.href ? (
+                      <a href={topic.href} rel="noopener">
+                        {topic.name}
+                      </a>
+                    ) : (
+                      topic.name
+                    )}
+                  </h3>
+                  <p class="label">{topic.area}</p>
+                </div>
+                {topic.note && <p class="entry__desc">{topic.note}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</Base>

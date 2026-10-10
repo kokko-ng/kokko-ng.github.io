@@ -293,6 +293,19 @@ a { color: inherit; }
   max-width: 38em;
 }
 
+/* --- study ------------------------------------------------------------- */
+
+.topics { margin-top: 40px; }
+.topics__label { margin-bottom: 14px; }
+.topics__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.topics .entry { padding: 16px 0; }
+.topics .entry__name { font-size: 16.5px; font-weight: 500; }
+.topics .entry__desc { font-size: 15px; margin-top: 4px; }
+
 /* --- narrow -------------------------------------------------------------- */
 
 @media (max-width: 900px) {
