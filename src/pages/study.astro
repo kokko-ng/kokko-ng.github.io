@@ -20,7 +20,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
       sections.map((section) => (
         <section class="topics">
           <h2 class="label topics__label">
-            {section.label} &mdash; {pad(section.topics.length)}
+            {section.label} &middot; {pad(section.topics.length)}
           </h2>
           <ul class="entries topics__list">
             {section.topics.map((topic) => (

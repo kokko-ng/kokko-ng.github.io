@@ -62,7 +62,7 @@ const isCurrent = (href: string) =>
     try {
       localStorage.setItem(KEY, next);
     } catch {
-      /* private mode, or site data blocked — the choice just will not persist */
+      /* private mode, or site data blocked; the choice just will not persist */
     }
     label();
   });

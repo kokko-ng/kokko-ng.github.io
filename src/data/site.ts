@@ -8,7 +8,7 @@ export const site = {
   positioning:
     "I build systems from first principles to understand how they actually work.",
   intro:
-    "I work on cloud engineering and agentic developer workflows at Insight Enterprises in Singapore. Outside that I build things from their smallest working parts \u2014 an 8-bit computer, developer tooling \u2014 because implementing a system is the only way I reliably understand it. The projects here set out how each one was built.",
+    "I work on cloud engineering and agentic developer workflows at Insight Enterprises in Singapore. Outside that I build things from their smallest working parts (an 8-bit computer, developer tooling) because implementing a system is the only way I reliably understand it. The projects here set out how each one was built.",
   description:
     "Projects by Kokko Ng, an engineer in Singapore, on computer architecture and agentic developer tooling.",
   quote: "If you run, you gain one. If you move forward, you gain two.",

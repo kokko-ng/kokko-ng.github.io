@@ -22,7 +22,7 @@ npm run dev      # http://localhost:4321
 ## Checks
 
 ```bash
-npm run check    # astro check — types and template diagnostics
+npm run check    # astro check: types and template diagnostics
 npm run build    # production build
 ```
 
